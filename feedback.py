@@ -24,7 +24,7 @@ def create_pid_controller(parameters, settings, sample_period):
     def compute_force(t, state):
         p, v, theta, omega = state
         # TODO：根据当前状态和 Ts 计算离散 PID 控制力。
-        return 0.0
+        return (-p) #随便写的，用来测试
 
     return compute_force
 

@@ -1,157 +1,213 @@
-# 倒立摆仿真
+# 倒立摆离散控制仿真
 
-同一个连续非线性倒立摆，由离散反馈接口每隔 Ts 秒计算一次力，并在下一周期前保持该力。当前 `feedback.py` 提供 PID、LQR、MPC 三个空壳，均返回 0 N，尚未实现控制算法；基于传递函数的 PID、基于线性状态空间的 LQR 待设计，MPC 先预留入口。
+本项目用 Python 模拟“离散控制器驱动连续倒立摆”，用于比较不同控制方法。PID 将基于线性化传递函数设计，LQR 将基于线性化状态空间设计，MPC 预留扩展入口。**所有控制器都在同一个原始非线性模型上检验。**
 
-## 运行与环境
+目前已实现仿真、数据记录、绘图和动画；PID、LQR、MPC 均为返回 **0 N** 的空壳，尚未实现控制算法。
 
-```bash
-conda activate cartpole
-cd /Users/zz/Desktop/invert
-python run_simulation.py
-```
+## 1. 物理模型与控制设计模型
 
-默认读取 [configs/pid.json](configs/pid.json)。可用 `python run_simulation.py --config configs/lqr.json` 或 `--config configs/mpc.json` 选择另外两个入口。所有可调参数在 JSON 中；输出固定为 `results/开始时间/`，时间使用 Asia/Shanghai，格式为 `YYYYMMDD-HHMMSS-微秒`，每次独立建目录。
+### 对象与坐标
 
-环境已建好：Python 3.12，NumPy/SciPy 负责数值计算，python-control 负责控制分析，Matplotlib 绘图，SymPy 符号推导，JupyterLab/ipykernel/ipympl 提供笔记本，Pillow/FFmpeg 导出动画。只有重建环境时才执行：
+采用水平小车、无质量刚杆和顶部点质量的经典模型。忽略摩擦、空气阻力、电机动态、推力饱和、轨道边界与碰撞。
 
-```bash
-conda create -n cartpole --override-channels -c conda-forge --strict-channel-priority python=3.12 numpy scipy control matplotlib sympy jupyterlab ipykernel ipympl pillow ffmpeg
-```
+| 符号 | 含义 | 单位 |
+| --- | --- | --- |
+| M、m | 小车质量、顶部质点质量 | kg |
+| L | 支点到顶部质点的距离 | m |
+| g | 重力加速度 | m/s² |
+| p、v | 小车位置、速度，向右为正 | m、m/s |
+| θ、ω | 摆角、角速度；θ=0 竖直向上，正角向右倾斜 | rad、rad/s |
+| u | 作用于小车的水平力，向右为正 | N |
 
-编辑器选择 `/opt/miniconda3/envs/cartpole/bin/python`；笔记本启动命令是 `jupyter lab`，交互绘图可用 `%matplotlib widget`。
+状态顺序固定为 `x=[p,v,θ,ω]ᵀ`，内部使用弧度，角度连续累计。顶部坐标为 `(p+L sinθ, L cosθ)`。默认模型参数为 M=1、m=0.1、L=0.5、g=9.81；这些是仿真设定值。
 
-## 配置与反馈接口
+### 连续非线性方程
 
-| JSON 配置 | 含义 |
-| --- | --- |
-| `parameters.M / m / L / g` | 底座质量 kg、顶部质点质量 kg、杆长 m、重力加速度 m/s²，均为有限正数 |
-| `initial_state` | `position_m`、`velocity_m_s`、`angle_deg`、`angular_velocity_deg_s`；也可分别使用 `angle_rad`、`angular_velocity_rad_s`，同一量不混用两种单位 |
-| `simulation.duration_s / output_dt_s` | 仿真时长／状态记录间隔 |
-| `simulation.max_step_s / rtol / atol` | 连续求解器最大内部步长、相对／绝对误差容限 |
-| `control.sample_period_s` | 反馈采样周期 Ts |
-| `control.file / factory / settings` | 反馈模块路径、工厂函数名和控制器参数 |
-| `output.plot` | 是否输出曲线 |
-| `output.animation.format / fps / speed` | `none`、`mp4` 或 `gif`，帧率、播放倍速 |
-
-输入文件路径相对于 JSON 所在目录。`output` 仅支持 `plot` 和 `animation`；旧版 `directory`、`timestamp_subdirectory` 字段已移除，使用时会报错。
-
-平台每次运行调用配置中 `control.factory` 指定的工厂函数创建新实例，再于每个采样时刻调用 `controller(t, state) -> u`。`state=[p,v,theta,omega]` 是当前状态的副本，单位为 m、m/s、rad、rad/s；返回值是有限实数，单位 N。控制器可用闭包或类实例保存积分等内部状态，各次运行互不继承记忆。
-
-| 配置 | feedback.py 中的工厂函数 |
-| --- | --- |
-| `configs/pid.json` | `create_pid_controller(parameters, settings, sample_period)` |
-| `configs/lqr.json` | `create_lqr_controller(parameters, settings, sample_period)` |
-| `configs/mpc.json` | `create_mpc_controller(parameters, settings, sample_period)` |
-
-三个入口的 `settings` 暂为空，参数含义及后续实现位置已注释在 `feedback.py` 中。原速度阻尼示例与 `configs/simulation.json` 已移除。现有 `configs/template.json` 也已改接 PID 空壳，保留其初始位置 0.3 m、直立和 MP4 输出设置。
-
-**采样周期、记录间隔、求解器内部步长彼此独立。** 默认 30 s、Ts=0.02 s、记录间隔 0.01 s：反馈计算 1500 次，输出 3001 条状态；终点不再计算新力，最后不足一个周期时缩短保持区间。求解器内部评估不会重复调用控制器。仿真按逻辑时间运行，不等待实际时间流逝。
-
-Python 调试接口：`simulate_feedback(controller=..., sample_period=..., params=..., initial_state=..., duration=..., output_dt=...)` 返回结果；`CartPoleSimulator.step(u, dt)` 可单步推进。接口实现在 `cartpole_simulation.py`。
-
-仅支持 `control` 反馈函数配置；旧版 `force` 配置及 `simulate(force=...)` 接口已移除。需要零力物理检查时，让反馈函数返回 `0.0` 即可。
-
-## 结果与重跑
-
-每次开始运行就归档输入，成功后在同一目录保存全部结果：
-
-| 文件 | 内容 |
-| --- | --- |
-| `config.json` | 本次使用的 JSON 原样副本；不再嵌入 metadata 重复保存 |
-| `feedback_source.py` | 本次反馈模块快照 |
-| `trajectory.csv` | 时间、四个状态、保持力、加速度、角度的度数版本、能量、外力做功及能量残差 |
-| `control.csv` | 每次反馈时刻、当时的四个状态和输出力；独立于状态记录频率 |
-| `metadata.json` | 开始／结束时间、状态、实际使用的参数与求解设置、版本、摘要和归档文件索引 |
-| `response.png`、`animation.mp4/gif` | 按配置生成的曲线与动画 |
-
-CSV 使用 17 位有效数字保留浮点精度，不再另存重复的 NPZ；完整力序列只存于相应 CSV，不再复制进 metadata。失败运行也保留配置和失败原因。反馈模块依赖的其他自编文件需一并维护，本平台自动快照的是指定模块。
-
-更改当前配置不会影响已完成的记录。符合当前格式的归档配置可直接重跑，程序会使用该目录的反馈快照，并创建一个新的时间目录：
-
-```bash
-python run_simulation.py --config results/某次开始时间/config.json
-```
-
-历史结果均保留：已有时间戳的目录已移至 results 根下；旧版未记录真实开始时间的案例放在 `results/legacy/`，其配置从旧 metadata 恢复并标明来源，不补造开始时间。原 examples 中不同案例的参数随对应结果归档。旧版开环结果仅作历史记录，其 `force` 配置不能再由当前程序重跑。含旧输出字段的反馈配置也不再直接支持；需要重跑时另建配置，删除旧字段并将 `control.file` 指向原反馈快照，不修改原始归档。
-
-## 验收
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-测试覆盖动力学、能量／动量、离散力保持、反馈调用时序、状态记忆重置、输入快照及归档重跑。运行默认配置后，应有 1500 条控制记录、3001 条状态记录；三个占位入口的 `control.csv` 力应全为 0；这只验收调用与输出链路，不表示已实现控制。将动画 format 改为 `mp4` 即可生成动画。
-
-零初始状态、零力应保持平衡；初始右倾 5°、零力时会向右倒，且机械能近似守恒。受力时检查 `E(t)-E(0)-∫u·v dt` 的数值残差。当前零力空壳不会稳定倒立摆；角度连续累计，350° 与 −10° 几何姿态相同。
-
-## 模型与后续设计公式
-
-采用平面小车、无质量刚杆和顶部点质量；没有摩擦、空气阻力、碰撞、轨道边界、推力饱和或电机动态。所有方法都检验于同一原始非线性对象。p、u 向右为正，θ=0 竖直向上，正角度向右倾斜，竖直坐标向上。反馈默认能准确读取全部四个状态，尚无传感器噪声、估计或计算延迟。
-
-<details>
-<summary>建模推导、线性化与传递函数（展开）</summary>
-
-顶部坐标与速度：
+令 `d=M+m sin²θ`，有
 
 \[
-x_m=p+L\sin\theta,\quad y_m=L\cos\theta,\quad
-\dot x_m=v+L\omega\cos\theta,\quad\dot y_m=-L\omega\sin\theta.
+\dot p=v,\qquad
+\dot v=\frac{u+mL\omega^2\sin\theta-mg\sin\theta\cos\theta}{d},
 \]
 
-动能、势能与拉格朗日函数：
-
 \[
-T=\tfrac12(M+m)v^2+mLv\omega\cos\theta+\tfrac12mL^2\omega^2,\quad
-V=mgL\cos\theta,\quad\mathcal L=T-V.
-\]
-
-对广义坐标 q=[p,θ]，广义力为 [u,0]；将其代入 `d/dt(∂ℒ/∂q̇)−∂ℒ/∂q=Q`，得到
-
-\[
-(M+m)\ddot p+mL\cos\theta\ddot\theta-mL\sin\theta\omega^2=u,\qquad
-mL\cos\theta\ddot p+mL^2\ddot\theta-mgL\sin\theta=0.
-\]
-
-质量矩阵行列式为 `mL²(M+m sin²θ)>0`。令 d=M+m sin²θ，完整非线性状态方程为
-
-\[
-\dot p=v,\quad
-\dot v=\frac{u+mL\omega^2\sin\theta-mg\sin\theta\cos\theta}{d},\quad
-\dot\theta=\omega,\quad
+\dot\theta=\omega,\qquad
 \dot\omega=\frac{(M+m)g\sin\theta-u\cos\theta-mL\omega^2\sin\theta\cos\theta}{Ld}.
 \]
 
-机械能 E=T+V 满足 `dE/dt=u·v`。系统有两个机械自由度、四个一阶状态、一个力输入。任意固定 p、其余状态及 u 为 0 都是直立平衡点；θ=0、静止时正力使小车向右加速、杆向左倾斜。
+直立静止时，正向推力使小车向右加速、摆杆向左倾斜；直立平衡点在无控制时不稳定。
 
-在直立平衡点只保留扰动的一阶项（包含舍弃 ω²sinθ 等高阶项），得到 `δẋ=Aδx+Bδu`，x=[p,v,θ,ω]ᵀ：
+<details>
+<summary>拉格朗日建模与能量检验</summary>
+
+动能、势能和拉格朗日函数为
 
 \[
-A=\begin{bmatrix}0&1&0&0\\0&0&-mg/M&0\\0&0&0&1\\0&0&(M+m)g/(ML)&0\end{bmatrix},\quad
-B=\begin{bmatrix}0\\1/M\\0\\-1/(ML)\end{bmatrix},\quad
-C=\begin{bmatrix}1&0&0&0\\0&0&1&0\end{bmatrix},\quad D=\begin{bmatrix}0\\0\end{bmatrix}.
+T=\tfrac12(M+m)v^2+mLv\omega\cos\theta+\tfrac12mL^2\omega^2,
+\qquad V=mgL\cos\theta,\qquad\mathcal L=T-V.
 \]
 
-输出 y=[p,θ]ᵀ 不等同于已测得速度。零初始条件下的线性传递函数为
+取广义坐标 `[p,θ]` 和广义力 `[u,0]`，代入拉格朗日方程得到
+
+\[
+(M+m)\ddot p+mL\cos\theta\ddot\theta-mL\sin\theta\omega^2=u,
+\qquad mL\cos\theta\ddot p+mL^2\ddot\theta-mgL\sin\theta=0.
+\]
+
+联立求解即得上述非线性方程。机械能 `E=T+V` 满足 `dE/dt=u·v`，因此 `E(t)-E(0)-∫u·v dt` 应接近零，可用于检查数值仿真的物理一致性。
+
+</details>
+
+### 线性化、传递函数与离散化
+
+在静止直立平衡点附近，以状态和输入的偏差表示：
+
+\[
+\delta\dot x=A\delta x+B\delta u,\qquad
+A=\begin{bmatrix}0&1&0&0\\0&0&-mg/M&0\\0&0&0&1\\0&0&(M+m)g/(ML)&0\end{bmatrix},\qquad
+B=\begin{bmatrix}0\\1/M\\0\\-1/(ML)\end{bmatrix}.
+\]
+
+若输出为小车位置和摆角，则 `y=[p,θ]ᵀ`，
+
+\[
+C=\begin{bmatrix}1&0&0&0\\0&0&1&0\end{bmatrix},\qquad D=\begin{bmatrix}0\\0\end{bmatrix}.
+\]
+
+对应零初始条件下的传递函数为
 
 \[
 \frac{\Theta(s)}{U(s)}=-\frac1{MLs^2-(M+m)g},\qquad
 \frac{P(s)}{U(s)}=\frac{Ls^2-g}{s^2[MLs^2-(M+m)g]}.
 \]
 
-角度通道隐藏了小车绝对位置与匀速平移，不应把其二阶分母看成完整系统的阶数。非零初始条件由状态空间或原始方程处理。
+角度通道的二阶传递函数不包含小车绝对位置和匀速平移模态，不能替代完整的四阶模型。
 
-默认 M=1 kg、m=0.1 kg、L=0.5 m、g=9.81 m/s² 是选定的仿真值，并非实测：A 的两个非零重力系数为 −0.981、21.582，B=[0,1,0,−2]ᵀ；极点为 0、0、±4.645643，直立开环不稳定。完整线性模型的能控秩及上述输出的能观秩均为 4。此时 `Θ/U=−2/(s²−21.582)`、`P/U=(s²−19.62)/[s²(s²−21.582)]`；5°、静止、零力时初始加速度约为 −0.085110 m/s²、1.879567 rad/s²。
-
-线性设计模型的零阶保持离散化为
+对于采样周期 Ts、周期内保持不变的输入，线性模型的零阶保持离散化为
 
 \[
-x_{k+1}=A_dx_k+B_du_k,\quad A_d=e^{AT_s},\quad B_d=\int_0^{T_s}e^{A\tau}B\,d\tau.
+\delta x_{k+1}=A_d\delta x_k+B_d\delta u_k,\qquad
+A_d=e^{AT_s},\qquad B_d=\int_0^{T_s}e^{A\tau}B\,d\tau.
 \]
 
-可使用 `scipy.signal.cont2discrete(..., method='zoh')`。A 不可逆，不能使用要求 A 可逆的公式；这些离散矩阵也不是原始非线性对象的全局精确表达。控制效果始终通过积分原始方程检验。
+这些矩阵用于控制器设计与分析。仿真对象仍通过连续非线性方程推进，反馈接口当前可准确读取全部四个状态，不含传感器噪声和计算延迟。
 
-参考：[MIT Cart-Pole 模型](https://underactuated.csail.mit.edu/acrobot.html)。该资料以下垂为零，与这里的约定满足 `θ_MIT=π−θ`，不能直接混用矩阵符号。
+## 2. 环境与运行
 
-</details>
+在项目根目录（包含 `run_simulation.py` 的目录）打开终端，激活环境后选择配置运行：
 
-代码分工：`cartpole_model.py` 物理方程，`cartpole_simulation.py` 积分与反馈时序，`feedback.py` 控制接口，`run_simulation.py` 配置与归档，`cartpole_visualization.py` 可视化。`tests/` 保留自动检查；根目录的 [作业要求.pdf](作业要求.pdf) 是课程要求原件，[AGENTS.md](AGENTS.md) 记录 AI 协作约定与最新交接状态。
+```bash
+conda activate cartpole
+python run_simulation.py --config configs/pid.json
+python run_simulation.py --config configs/lqr.json
+python run_simulation.py --config configs/mpc.json
+```
+
+每条命令分别执行一次仿真。省略 `--config` 时默认使用 `configs/pid.json`。编辑器中选择 `cartpole` 环境的 Python 解释器。
+
+首次使用、尚未创建环境时执行：
+
+```bash
+conda create -n cartpole --override-channels -c conda-forge --strict-channel-priority python=3.12 numpy scipy control matplotlib sympy jupyterlab ipykernel ipympl pillow ffmpeg
+```
+
+NumPy/SciPy 用于数值计算，python-control/SymPy 用于控制分析与推导，Matplotlib 用于绘图，Pillow/FFmpeg 用于动画。需要笔记本时，在该环境运行 `jupyter lab`。
+
+## 3. 四种时间参数：控制、求解、记录、播放
+
+**控制器何时更新力、求解器如何计算运动、何时保存状态、视频如何播放，是四件不同的事。**
+
+| 参数 | 作用 | 调整后的影响 |
+| --- | --- | --- |
+| `control.sample_period_s` | 反馈采样周期 Ts，每隔 Ts 读取当前状态并计算一次力 | 改变离散控制行为，可能影响稳定性和控制效果 |
+| `simulation.max_step_s` | 连续 ODE 求解器允许的最大内部步长 | 影响数值求解精度和计算耗时；实际步长自适应，通常并不固定 |
+| `simulation.output_dt_s` | 状态记录间隔，决定 `trajectory.csv` 的时间网格 | 改变记录密度、曲线细节和动画插值依据；不改变反馈更新或积分轨迹 |
+| `output.animation.fps` | 每秒视频播放的帧数 | 改变动画流畅度和渲染开销；不改变物理仿真或反馈频率 |
+
+例如：Ts=0.02 s、最大内部步长=0.01 s、状态记录间隔=0.01 s、视频帧率=20 fps、播放倍速=1 时：
+
+- **反馈**在 0、0.02、0.04…秒执行，相当于 50 Hz；每次输出的力保持到下一次更新。
+- **求解**在每个保持区间内自适应积分，单步不超过 0.01 s，也不会跨过下一次控制更新点。积分内部评估不会调用控制器。
+- **记录**在 0、0.01、0.02…秒保存状态，即按 100 Hz 的时间网格记录状态；记录时刻的状态由求解器连续插值获得。
+- **视频**每隔 0.05 个仿真秒取一帧。动画根据已记录的状态插值生成，不重新计算动力学。
+
+四个参数不需要设置成相同值，也不要求周期成整数倍。更密的记录或更多视频帧不能代替更精确的数值求解；记录过稀时，提高帧率也无法补回丢失的运动细节。求解器的 `rtol`、`atol` 分别控制相对和绝对误差容限，与最大步长共同决定求解设置。
+
+`output.animation.speed` 是播放倍速：2 表示一秒视频展示两秒仿真运动，相邻画面对应的仿真时间间隔为 `speed/fps`。仿真时长由 `simulation.duration_s` 决定，计算耗时由机器与设置决定，二者不等于视频播放时长。
+
+对于 30 s 仿真、Ts=0.02 s、记录间隔=0.01 s：反馈更新 **1500 次**，状态记录 **3001 条**。状态包含起点和终点；终点不再更新控制力，最后一个控制区间必要时缩短到终点。
+
+## 4. 配置与控制器接口
+
+所有运行参数均写在 JSON 中。除上节的时间参数外，主要字段如下：
+
+| 配置项 | 含义 |
+| --- | --- |
+| `parameters.M / m / L / g` | 模型参数，单位见模型表，均为有限正数 |
+| `initial_state.position_m / velocity_m_s` | 初始小车位置与速度 |
+| `initial_state.angle_deg / angular_velocity_deg_s` | 初始摆角与角速度；也可分别使用 `angle_rad / angular_velocity_rad_s`，同一量只选一种单位 |
+| `control.file` | 反馈 Python 模块路径，相对于 JSON 所在目录解析 |
+| `control.factory` | 创建控制器的工厂函数名 |
+| `control.settings` | 控制算法参数；当前空壳使用空对象 `{}` |
+| `output.plot` | 是否生成曲线图，取 `true` 或 `false` |
+| `output.animation.format` | `none` 关闭动画，或选择 `mp4`、`gif` |
+
+三个控制器都位于 `feedback.py`：
+
+| 配置 | 工厂函数 |
+| --- | --- |
+| `configs/pid.json` | `create_pid_controller` |
+| `configs/lqr.json` | `create_lqr_controller` |
+| `configs/mpc.json` | `create_mpc_controller` |
+
+平台每次仿真调用一次工厂函数 `factory(parameters, settings, sample_period)`，获得 `controller(t, state)`。每个采样时刻传入当前仿真时间和状态副本 `[p,v,theta,omega]`，返回有限实数力 u，单位 N。工厂作用域可保存积分误差等内部状态，各次仿真独立初始化。可用参数和待实现位置见 `feedback.py` 注释。
+
+`configs/template.json` 是可修改的配置模板。需要在 Python 中调试时，可调用 `simulate_feedback(...)` 完成整段仿真，或用 `CartPoleSimulator.step(u, dt)` 逐段施加由外部反馈逻辑算出的力。
+
+## 5. 输出与结果检查
+
+每次运行新建 `results/YYYYMMDD-HHMMSS-微秒/`，目录名使用仿真开始时的 Asia/Shanghai 时间。终端结束信息会显示结果目录。
+
+| 文件 | 内容 |
+| --- | --- |
+| `config.json`、`feedback_source.py` | 本次配置与反馈模块快照 |
+| `trajectory.csv` | 时间、状态、保持力、加速度、角度的度数版本、能量、外力做功与能量残差 |
+| `control.csv` | 每次反馈时刻的状态和控制力，按反馈采样周期记录 |
+| `metadata.json` | 运行状态、时间、实际参数、求解设置、软件版本与结果摘要 |
+| `response.png` | 状态、力和能量曲线，开启绘图时生成 |
+| `animation.mp4` 或 `animation.gif` | 开启动画时生成 |
+
+先查看 `response.png`，再根据需要读取 CSV 或播放动画。当前三个空壳的控制力应全为零；5° 初始倾角下摆杆会倒下，而不是保持直立。零力时机械能应近似守恒，非零力时可检查能量变化与输入功是否一致。
+
+按当前格式保存的归档配置可用于重跑：
+
+```bash
+python run_simulation.py --config "results/<运行目录名>/config.json"
+```
+
+将 `<运行目录名>` 替换成实际目录名。程序加载归档中的反馈模块快照，并为新运行创建独立目录。自动快照仅包含指定模块；若控制器依赖其他自编文件，也需保留这些依赖。
+
+## 6. 自动测试
+
+在项目根目录、已激活 `cartpole` 环境的终端运行：
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+`unittest` 是 **Python 标准库中的测试模块**，无需在项目中创建同名文件。`python -m unittest` 启动该模块，`discover` 自动查找测试，`-s tests` 指定从 `tests/` 目录查找 `test*.py` 文件，`-v` 逐项显示结果。
+
+本项目的测试位于 `tests/test_model.py`、`test_simulation.py`、`test_feedback.py` 和 `test_archive.py`，检查动力学、能量与动量、反馈时序、配置及归档重跑。运行结束显示 `OK` 表示测试通过；这验证的是仿真框架，不等于控制器已实现或已稳定倒立摆。
+
+## 7. 文件导航
+
+| 文件或目录 | 职责 |
+| --- | --- |
+| `cartpole_model.py` | 非线性动力学、几何、能量、线性状态空间与传递函数 |
+| `cartpole_simulation.py` | 积分、反馈时序、单步调试与数据导出 |
+| `feedback.py`、`configs/` | 控制器实现入口与运行配置 |
+| `run_simulation.py` | 加载配置、组织仿真和结果归档 |
+| `cartpole_visualization.py` | 绘图和动画 |
+| `tests/` | 自动测试 |
+| [作业要求.pdf](作业要求.pdf) | 课程要求原件 |
+| [AGENTS.md](AGENTS.md) | AI 协作约定与工作交接 |

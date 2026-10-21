@@ -27,7 +27,7 @@
   "output": {
     "plot": true,
     "animation": {
-      "format": "none",
+      "format": "mp4",
       "fps": 20,
       "speed": 1.0
     }
