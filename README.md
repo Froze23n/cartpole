@@ -25,15 +25,15 @@
 
 令 `d=M+m sin²θ`，有
 
-\[
+$$
 \dot p=v,\qquad
 \dot v=\frac{u+mL\omega^2\sin\theta-mg\sin\theta\cos\theta}{d},
-\]
+$$
 
-\[
+$$
 \dot\theta=\omega,\qquad
 \dot\omega=\frac{(M+m)g\sin\theta-u\cos\theta-mL\omega^2\sin\theta\cos\theta}{Ld}.
-\]
+$$
 
 直立静止时，正向推力使小车向右加速、摆杆向左倾斜；直立平衡点在无控制时不稳定。
 
@@ -42,17 +42,17 @@
 
 动能、势能和拉格朗日函数为
 
-\[
+$$
 T=\tfrac12(M+m)v^2+mLv\omega\cos\theta+\tfrac12mL^2\omega^2,
 \qquad V=mgL\cos\theta,\qquad\mathcal L=T-V.
-\]
+$$
 
 取广义坐标 `[p,θ]` 和广义力 `[u,0]`，代入拉格朗日方程得到
 
-\[
+$$
 (M+m)\ddot p+mL\cos\theta\ddot\theta-mL\sin\theta\omega^2=u,
 \qquad mL\cos\theta\ddot p+mL^2\ddot\theta-mgL\sin\theta=0.
-\]
+$$
 
 联立求解即得上述非线性方程。机械能 `E=T+V` 满足 `dE/dt=u·v`，因此 `E(t)-E(0)-∫u·v dt` 应接近零，可用于检查数值仿真的物理一致性。
 
@@ -62,33 +62,33 @@ T=\tfrac12(M+m)v^2+mLv\omega\cos\theta+\tfrac12mL^2\omega^2,
 
 在静止直立平衡点附近，以状态和输入的偏差表示：
 
-\[
+$$
 \delta\dot x=A\delta x+B\delta u,\qquad
 A=\begin{bmatrix}0&1&0&0\\0&0&-mg/M&0\\0&0&0&1\\0&0&(M+m)g/(ML)&0\end{bmatrix},\qquad
 B=\begin{bmatrix}0\\1/M\\0\\-1/(ML)\end{bmatrix}.
-\]
+$$
 
 若输出为小车位置和摆角，则 `y=[p,θ]ᵀ`，
 
-\[
+$$
 C=\begin{bmatrix}1&0&0&0\\0&0&1&0\end{bmatrix},\qquad D=\begin{bmatrix}0\\0\end{bmatrix}.
-\]
+$$
 
 对应零初始条件下的传递函数为
 
-\[
+$$
 \frac{\Theta(s)}{U(s)}=-\frac1{MLs^2-(M+m)g},\qquad
 \frac{P(s)}{U(s)}=\frac{Ls^2-g}{s^2[MLs^2-(M+m)g]}.
-\]
+$$
 
 角度通道的二阶传递函数不包含小车绝对位置和匀速平移模态，不能替代完整的四阶模型。
 
 对于采样周期 Ts、周期内保持不变的输入，线性模型的零阶保持离散化为
 
-\[
+$$
 \delta x_{k+1}=A_d\delta x_k+B_d\delta u_k,\qquad
 A_d=e^{AT_s},\qquad B_d=\int_0^{T_s}e^{A\tau}B\,d\tau.
-\]
+$$
 
 这些矩阵用于控制器设计与分析。仿真对象仍通过连续非线性方程推进，反馈接口当前可准确读取全部四个状态，不含传感器噪声和计算延迟。
 
