@@ -29,15 +29,51 @@ def create_pid_controller(parameters, settings, sample_period):
     return compute_force
 
 
+
+import numpy as np
+from scipy.signal import cont2discrete
+from scipy.linalg import solve_discrete_are
+
+from cartpole_model import linear_state_space
+
+
 def create_lqr_controller(parameters, settings, sample_period):
-    """LQR 空壳；可用参数见模块说明，权重与反馈增益待设计。"""
-    # 后续在此由 parameters 构造线性模型，结合 Ts 和 settings 设计反馈增益。
+    # 1. 获得直立平衡点附近的连续线性模型
+    A, B, C, D = linear_state_space(parameters)
+
+    # 2. 零阶保持离散化
+    Ad, Bd, _, _, _ = cont2discrete(
+        (A, B, C, D),
+        sample_period,
+        method="zoh"
+    )
+
+    # 3. LQR 权重
+    Q = np.diag(settings.get("Q_diag", [10, 1, 100, 1]))
+    R = np.array([[settings.get("R", 1.0)]])
+
+    # 4. 求解离散 Riccati 方程
+    P = solve_discrete_are(Ad, Bd, Q, R)
+
+    # 5. 计算最优反馈增益
+    K = np.linalg.solve(
+        R + Bd.T @ P @ Bd,
+        Bd.T @ P @ Ad
+    )
+
+    # 6. 检查离散闭环局部稳定性
+    eigenvalues = np.linalg.eigvals(Ad - Bd @ K)
+    if np.any(np.abs(eigenvalues) >= 1.0):
+        raise ValueError("LQR closed-loop is not stable")
+
+    # 7. 每个采样时刻计算控制力
     def compute_force(t, state):
-        p, v, theta, omega = state
-        # TODO：根据状态偏差计算 LQR 控制力。
-        return 0.0
+        x = np.asarray(state, dtype=float)
+        u = -K @ x
+        return float(u.item())
 
     return compute_force
+
 
 
 def create_mpc_controller(parameters, settings, sample_period):
