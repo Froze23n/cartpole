@@ -83,7 +83,7 @@ class ArchiveTests(unittest.TestCase):
             path.write_text(json.dumps({'simulation': {'duration_s': -1},
                                         'control': {'sample_period_s': 0.02,
                                                     'file': str(Path(__file__).resolve().parents[1] / 'feedback.py'),
-                                                    'factory': 'create_pid_controller'},
+                                                    'factory': 'create_lqr_controller'},
                                         'output': {'plot': False}}))
             with patch('run_simulation.RESULTS_ROOT', folder / 'results'), redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
                 with self.assertRaises(SystemExit) as error:

@@ -22,7 +22,23 @@
     "sample_period_s": 0.02,
     "file": "../feedback.py",
     "factory": "create_pid_controller",
-    "settings": {}
+    "settings": {
+      "position_target_m": 0.0,
+      "angle_limit_deg": 10.0,
+      "force_limit_N": 20.0,
+      "position_pid": {
+        "kp": 0.16,
+        "ki": 0.06,
+        "kd": 0.2,
+        "integral_limit": 0.05
+      },
+      "angle_pid": {
+        "kp": 100.0,
+        "ki": 0.0,
+        "kd": 20.0,
+        "integral_limit": 5.0
+      }
+    }
   },
   "output": {
     "plot": true,

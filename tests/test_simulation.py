@@ -79,7 +79,7 @@ class SimulationTests(unittest.TestCase):
                                         'initial_state': {'angle_deg': 90, 'angular_velocity_deg_s': 180},
                                         'control': {'sample_period_s': 0.02,
                                                     'file': str(Path(__file__).resolve().parents[1] / 'feedback.py'),
-                                                    'factory': 'create_pid_controller'}}))
+                                                    'factory': 'create_lqr_controller'}}))
             _, kwargs = read_config(path)
             self.assertEqual(kwargs['params'], Parameters(2, 0.3, 0.8))
             np.testing.assert_allclose(kwargs['initial_state'], [0, 0, np.pi / 2, np.pi])
