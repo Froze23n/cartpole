@@ -1,0 +1,22 @@
+{
+  "unit_tests": 56,
+  "unit_test_result": "OK",
+  "replayed_case": "02/lqr",
+  "replay_trajectory_and_control_csv_byte_identical": true,
+  "failed_cases_identical_due_to_constant_positive_20N": [
+    "03",
+    "04",
+    "05"
+  ],
+  "all_runs_complete": true,
+  "state_records_per_run": 2001,
+  "control_records_per_run": 1000,
+  "max_energy_balance_error_J": 5.584297468885779e-09,
+  "base_commit": "923fa47f64aa13998f8262940925150b7f8741ad",
+  "versions": {
+    "python": "3.9.12",
+    "numpy": "1.24.1",
+    "scipy": "1.9.3",
+    "matplotlib": "3.5.1"
+  }
+}
