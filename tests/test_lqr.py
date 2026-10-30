@@ -8,7 +8,7 @@ Run from the repository root:
 
     python -m unittest tests/test_lqr.py -v
 
-Expected: Tests fail while create_lqr_controller is a stub.
+The optional force limit is checked separately from the unconstrained gain.
 """
 
 import unittest
@@ -96,6 +96,23 @@ def gain_from_controller(controller):
 
 
 class LQRTests(unittest.TestCase):
+
+    def test_optional_force_limit_clips_both_signs_without_changing_small_signals(self):
+        params = Parameters(1, 1, 0.5, 9.81)
+        settings = lqr_settings()
+        raw = make_controller(params, settings)
+        limited = make_controller(params, {**settings, 'force_limit_N': 20})
+        state = np.array([0.01, 0, np.deg2rad(1), 0])
+        self.assertAlmostEqual(limited(0, state), raw(0, state), places=12)
+        for sign in (-1, 1):
+            state = np.array([0, 0, sign * np.pi, 0])
+            self.assertGreater(abs(raw(0, state)), 20)
+            self.assertAlmostEqual(limited(0, state), np.clip(raw(0, state), -20, 20))
+
+    def test_force_limit_rejects_nonpositive_and_nonfinite_values(self):
+        for limit in (0, -1, np.nan, np.inf):
+            with self.subTest(limit=limit), self.assertRaisesRegex(ValueError, 'force_limit_N'):
+                make_controller(settings={**lqr_settings(), 'force_limit_N': limit})
 
     def test_zero_state_produces_zero_force(self):
         """Upright equilibrium must produce zero control force."""
