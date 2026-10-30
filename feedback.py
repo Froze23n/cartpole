@@ -105,11 +105,17 @@ def create_pid_controller(parameters, settings, sample_period):
 
 
 def create_lqr_controller(parameters, settings, sample_period):
-    """零阶保持离散模型上的 LQR；目标状态为 [0,0,0,0]，输出不限幅。
+    """零阶保持离散模型上的 LQR；目标状态为 [0,0,0,0]。
 
     settings: Q_diag 为 [p,v,theta,omega] 对应的四个状态权重，
     默认 [10,1,100,1]；R 为控制力权重，默认 1.0。
+    force_limit_N 可选；省略时不限幅，设置时必须有限且大于零。
     """
+    force_limit = settings.get('force_limit_N')
+    if force_limit is not None:
+        force_limit = float(force_limit)
+        if not np.isfinite(force_limit) or force_limit <= 0:
+            raise ValueError('force_limit_N must be finite and positive.')
     # 1. 获得直立平衡点附近的连续线性模型
     A, B, C, D = linear_state_space(parameters)
 
@@ -142,7 +148,8 @@ def create_lqr_controller(parameters, settings, sample_period):
     def compute_force(t, state):
         x = np.asarray(state, dtype=float)
         u = -K @ x
-        return float(u.item())
+        force = float(u.item())
+        return force if force_limit is None else float(np.clip(force, -force_limit, force_limit))
 
     return compute_force
 
