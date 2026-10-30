@@ -1,7 +1,7 @@
 {
   "parameters": {
     "M": 1.0,
-    "m": 0.1,
+    "m": 1.0,
     "L": 0.5,
     "g": 9.81
   },
@@ -12,7 +12,7 @@
     "angular_velocity_deg_s": 0.0
   },
   "simulation": {
-    "duration_s": 30.0,
+    "duration_s": 20.0,
     "output_dt_s": 0.01,
     "max_step_s": 0.01,
     "rtol": 1e-09,
@@ -22,12 +22,21 @@
     "sample_period_s": 0.02,
     "file": "../feedback.py",
     "factory": "create_lqr_controller",
-    "settings": {}
+    "settings": {
+      "Q_diag": [
+        10,
+        1,
+        100,
+        1
+      ],
+      "R": 1.0,
+      "force_limit_N": 20.0
+    }
   },
   "output": {
     "plot": true,
     "animation": {
-      "format": "none",
+      "format": "mp4",
       "fps": 20,
       "speed": 1.0
     }
