@@ -151,8 +151,8 @@ def read_config(path):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description='JSON 配置的非线性倒立摆仿真；运行选项全部在 JSON 中')
-    parser.add_argument('--config', type=Path, default=PROJECT_ROOT / 'configs' / 'pid.json',
-                        help='选择 JSON 文件；省略时读取 configs/pid.json')
+    parser.add_argument('--config', type=Path, default=PROJECT_ROOT / 'configs' / 'pid_02_angle_30deg.json',
+                        help='选择 JSON 文件；省略时读取 configs/pid_02_angle_30deg.json')
     args = parser.parse_args(argv)
     started_at = datetime.now(TIMEZONE)
     output = None

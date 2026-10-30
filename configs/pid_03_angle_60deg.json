@@ -6,13 +6,13 @@
     "g": 9.81
   },
   "initial_state": {
-    "position_m": 10.0,
-    "velocity_m_s": 1.0,
-    "angle_deg": 5.0,
+    "position_m": 0.0,
+    "velocity_m_s": 0.0,
+    "angle_deg": 60.0,
     "angular_velocity_deg_s": 0.0
   },
   "simulation": {
-    "duration_s": 10.0,
+    "duration_s": 20.0,
     "output_dt_s": 0.01,
     "max_step_s": 0.01,
     "rtol": 1e-09,
@@ -37,7 +37,14 @@
         "ki": 0.0,
         "kd": 20.0,
         "integral_limit": 5.0
-      }
+      },
+      "tuning_poles": [
+        -1.0,
+        -1.2,
+        -1.5,
+        -4.0,
+        -5.0
+      ]
     }
   },
   "output": {

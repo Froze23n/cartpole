@@ -94,19 +94,103 @@ $$
 
 ### 串级 PID
 
-位置外环给出临时目标倾角，倾角内环给出水平力。以固定位置目标 r 表示，未限幅的控制量为
+位置外环给出临时目标倾角，倾角内环给出水平力。`feedback.py` 的 `compute_force` 将两环的误差、P、I、D 和限幅依次展开。以固定位置目标 r 表示，第 k 次采样时：
 
 $$
-e_p=r-p,\qquad \theta_{\mathrm{ref}}=k_{p,p}e_p+I_p-k_{d,p}v,
+e_{p,k}=r-p_k,\qquad
+\theta_{\mathrm{ref},k}=\operatorname{sat}_{\theta_{\max}}\left(
+ k_{p,p}e_{p,k}+I_{p,k}-k_{d,p}v_k\right),
 $$
 
 $$
-e_\theta=\theta-\theta_{\mathrm{ref}},\qquad u=k_{p,\theta}e_\theta+I_\theta+k_{d,\theta}\omega.
+e_{\theta,k}=\theta_k-\theta_{\mathrm{ref},k},\qquad
+u_k=\operatorname{sat}_{u_{\max}}\left(
+ k_{p,\theta}e_{\theta,k}+I_{\theta,k}+k_{d,\theta}\omega_k\right).
 $$
 
-内环使用“实际角度减目标角度”，与本项目正力产生负角加速度的坐标约定一致：摆杆右倾时，先向右推小车接住它。D 使用实测速度，不对目标值差分，避免目标变化引起微分冲击；当前测量无噪声，未另加微分滤波器。两环按同一 Ts 更新，内环应比外环响应更快；设计外环时必须包含闭合内环后的完整动力学，不能把倾角到位置的关系简单替换成恒定比例。
+这里 `sat_a(z)` 表示将 z 限制在 `[-a,a]`。先使用现有积分项计算本次输出，再按本次误差更新积分，供下一次调用使用：
 
-I 项采用后向矩形积分 `I_k=I_{k-1}+Ki*Ts*e_k`，t=0 不积分；ki=0 时关闭该环积分。控制器限制目标倾角、输出力及 I 项贡献；输出饱和且积分会继续推向饱和时暂停积分，反向卸载仍被允许，内环力饱和时还冻结外环积分。这采用[条件积分防饱和方法](https://www.mathworks.com/help/simulink/slref/anti-windup-control-using-a-pid-controller.html)。当前配置使用位置 PID、倾角 PD；局部稳定性需检查包含四个物理状态和启用积分状态的完整离散闭环，实际效果需在非线性对象上验证。
+$$
+I_0=0,\qquad I_{k+1}=\operatorname{sat}_{I_{\max}}\left(I_k+k_iT_se_k\right).
+$$
+
+I 存储已乘过 ki 的积分贡献，`integral_limit` 限制该贡献。第一次输出自然使用零积分，无需首拍标志；本次误差只影响下一拍及之后的积分项。这对应前向矩形积分，ki=0 关闭对应积分。
+
+内环使用“实际角度减目标角度”，与本项目正力产生负角加速度的坐标约定一致。**外环 D 直接使用 -v，内环 D 直接使用 omega**；首次采样也使用初始速度。固定位置目标下，位置误差变化率为 -v；内环采用对测量量的微分，不包含目标倾角变化率，因此不是完整的误差导数 `omega-d(theta_ref)/dt`。
+
+平台在每个采样时刻提供数值积分得到的当前速度和角速度，不含传感器噪声。相邻位置/摆角的差分给出上一采样区间的平均变化率，与当前瞬时值一般不同；当前实现直接利用已有状态，未加微分滤波。控制力仍只在每隔 Ts 时更新并保持，I 仍按离散求和更新，因此仍是离散控制。
+
+学习版保留目标倾角、输出力和积分项限幅，不进行饱和时的条件积分或两环联动冻结。积分项限幅限制了累积量，但在输出饱和时仍可能累积到上限，因此解除饱和或误差归零后仍可能保留 I 项。参数按下文约定填写，控制函数不另加通用参数校验。
+
+两环按同一 Ts 更新，当前配置使用位置 PID、倾角 PD；内环应比外环响应更快。设计外环时必须包含闭合内环后的完整动力学；分析离散闭环时还需计入启用的积分状态，实际效果在非线性对象上验证。
+
+### 从传递函数推导 PID 整定公式
+
+采用**完整闭环极点配置**：先选期望的闭环极点，再比较特征多项式的系数，算出两环增益。以下推导针对直立附近、未触发限幅、固定位置目标的情况，保留现有的**位置 PID＋倾角 PD**，即内环 `ki=0`。不是两环各自独立套用一组经验公式。
+
+记外环增益为 `Kp、Ki、Kd`，内环增益为 `ka、da`，分别对应 `angle_pid.kp、angle_pid.kd`。内环使用测量微分：
+
+$$
+u=k_a(\theta-\theta_{\mathrm{ref}})+d_a\dot\theta.
+$$
+
+由上面的力到摆角传递函数，闭合倾角环得到
+
+$$
+\frac{\Theta}{\Theta_{\mathrm{ref}}}
+=\frac{k_a}{MLs^2+d_as+k_a-(M+m)g}.
+$$
+
+线性化摆杆方程还给出 `s²P=(g−Ls²)Θ`。因此外环面对的**完整对象**为
+
+$$
+\frac{P}{\Theta_{\mathrm{ref}}}
+=\frac{k_a(g-Ls^2)}{s^2[MLs^2+d_as+k_a-(M+m)g]}.
+$$
+
+它包含小车平移的两个积分环节，以及正实零点 `sqrt(g/L)`，不能只用倾角闭环的二阶模型整定位置环。计算特征方程时将位置目标置零，此时外环等效控制器为 `Kp+Ki/s+Kd·s`；对测量速度微分与误差微分在这个固定目标下相同。闭环特征多项式为
+
+$$
+\begin{aligned}
+D(s)={}&s^3[MLs^2+d_as+k_a-(M+m)g]\\
+&+k_a(g-Ls^2)(K_ds^2+K_ps+K_i).
+\end{aligned}
+$$
+
+四个物理状态加一个位置积分状态，共五阶。选择五个目标极点 `λ₁…λ₅`，展开目标多项式：
+
+$$
+D_\star(s)=\prod_{j=1}^{5}(s-\lambda_j)
+=s^5+c_4s^4+c_3s^3+c_2s^2+c_1s+c_0.
+$$
+
+令 `D(s)=ML·D★(s)`，按同次幂比较系数，即得：
+
+$$
+\boxed{k_a=(M+m)g+ML\left(c_3+\frac{L}{g}c_1\right)},\qquad
+\boxed{d_a=ML\left(c_4+\frac{L}{g}c_2+\frac{L^2}{g^2}c_0\right)},
+$$
+
+$$
+\boxed{K_p=\frac{MLc_1}{k_ag}},\qquad
+\boxed{K_i=\frac{MLc_0}{k_ag}},\qquad
+\boxed{K_d=\frac{ML}{k_ag}\left(c_2+\frac{L}{g}c_0\right)}.
+$$
+
+`tune_angle_pid` 计算前两个增益，`tune_position_pid` 利用前者的结果计算后三个。**两函数配套使用**；五个目标极点属于完整闭环，不能将其中两个直接当成内环极点、另外三个当成外环极点。当前接口接受五个有限负实数，单位为 s⁻¹；极点绝对值增大通常意味着更快的期望响应，但也会增加控制需求和采样要求。这是一套可解释的初始整定方法，不保证最优性能或大角度摆起。
+
+连续目标极点稳定还不够。使用实际 Ts 将原四阶线性对象作 ZOH 离散化，并按代码中“输出后更新 I”的时序，组成增广状态 `[p,v,theta,omega,I_p]` 的离散矩阵（以目标平衡点为原点）：
+
+$$
+F=\begin{bmatrix}k_aK_p&k_aK_d&k_a&d_a\end{bmatrix},\qquad
+A_{\mathrm{cl},d}=
+\begin{bmatrix}
+A_d+B_dF&-k_aB_d\\
+\begin{matrix}-K_iT_s&0&0&0\end{matrix}&1
+\end{bmatrix}.
+$$
+
+整定函数要求这些离散特征值全部满足 `|z|<1`，否则报错。连续目标极点不等于实际离散极点；改变 Ts 后要重新检查。这个检查针对未饱和的局部模型，最终仍须在原始非线性对象上仿真。离散稳定性判据可参考 [MathWorks 的极点说明](https://www.mathworks.com/help/control/ref/dynamicsystem.pole.html)。
 
 ## 2. 环境与运行
 
@@ -114,12 +198,12 @@ I 项采用后向矩形积分 `I_k=I_{k-1}+Ki*Ts*e_k`，t=0 不积分；ki=0 时
 
 ```bash
 conda activate cartpole
-python run_simulation.py --config configs/pid.json
+python run_simulation.py --config configs/pid_02_angle_30deg.json
 python run_simulation.py --config configs/lqr.json
 python run_simulation.py --config configs/mpc.json
 ```
 
-每条命令分别执行一次仿真。省略 `--config` 时默认使用 `configs/pid.json`。编辑器中选择 `cartpole` 环境的 Python 解释器。
+每条命令分别执行一次仿真。省略 `--config` 时默认使用 `configs/pid_02_angle_30deg.json`。编辑器中选择 `cartpole` 环境的 Python 解释器。
 
 首次使用、尚未创建环境时执行：
 
@@ -172,19 +256,19 @@ NumPy/SciPy 用于数值计算，python-control/SymPy 用于控制分析与推�
 
 | 配置 | 工厂函数 |
 | --- | --- |
-| `configs/pid.json` | `create_pid_controller` |
+| `configs/pid_01_*.json` 至 `configs/pid_08_*.json` | `create_pid_controller` |
 | `configs/lqr.json` | `create_lqr_controller` |
 | `configs/mpc.json` | `create_mpc_controller` |
 
 平台每次仿真调用一次工厂函数 `factory(parameters, settings, sample_period)`，获得 `controller(t, state)`。每个采样时刻传入当前仿真时间和状态副本 `[p,v,theta,omega]`，返回有限实数力 u，单位 N。工厂作用域可保存积分误差等内部状态，各次仿真独立初始化。可用参数和待实现位置见 `feedback.py` 注释。
 
-`configs/template.json` 是可修改的配置模板。需要在 Python 中调试时，可调用 `simulate_feedback(...)` 完成整段仿真，或用 `CartPoleSimulator.step(u, dt)` 逐段施加由外部反馈逻辑算出的力。
+`configs/template.json` 是独立的可修改模板，不属于下列控制变量测试组。需要在 Python 中调试时，可调用 `simulate_feedback(...)` 完成整段仿真，或用 `CartPoleSimulator.step(u, dt)` 逐段施加由外部反馈逻辑算出的力。
 
 ### PID 参数
 
-全部可调参数在 `control.settings` 中，均须显式填写：
+可调参数位于 `control.settings`。默认使用 `tuning_poles` 配套整定两环；`position_pid`、`angle_pid` 中的手填增益保留为对照基准，其中的 `integral_limit` 仍参与实际控制：
 
-| 字段 | 当前值 | 含义与单位 |
+| 字段 | JSON 中的值 | 含义与单位 |
 | --- | --- | --- |
 | `position_target_m` | 0 | 目标小车位置，m；最终目标摆角为 0 |
 | `angle_limit_deg` | 10 | 外环目标倾角绝对值上限，deg；不会直接限制真实摆角 |
@@ -193,10 +277,67 @@ NumPy/SciPy 用于数值计算，python-control/SymPy 用于控制分析与推�
 | `position_pid.integral_limit` | 0.05 | 外环 I 项的最大角度贡献，rad |
 | `angle_pid.kp / ki / kd` | 100 / 0 / 20 | 内环增益，单位依次为 N/rad、N/(rad·s)、N·s/rad |
 | `angle_pid.integral_limit` | 5 | 内环 I 项的最大力贡献，N；ki=0 时不起作用 |
+| `tuning_poles` | `[-1, -1.2, -1.5, -4, -5]` | 完整连续闭环的五个目标极点，s⁻¹ |
 
-这组参数使用**外环 PID、内环 PD**。内环积分功能已实现，但本例先关闭它，用位置外环消除位置偏差。所有增益非负，角度计算均使用弧度，只有 `angle_limit_deg` 在读取时转换成弧度。
+手填基准和默认公式整定均使用**外环 PID、内环 PD**。内环积分功能已实现，但这套整定令其 ki=0，用位置外环消除位置偏差。所有增益非负，角度计算均使用弧度，只有 `angle_limit_deg` 在读取时转换成弧度。
 
-这组增益的已验证基准条件为 M=1 kg、m=1 kg、L=0.5 m、Ts=0.02 s、初始位置 0 m、初始倾角 5°、初始速度为零，仿真 10 s。基准初态不代表可编辑的 `configs/pid.json` 当前取值，实际运行前请检查其中的 `initial_state`。参数经离散线性闭环极点检查和完整非线性仿真验证，可用于直立附近的平衡与定位；不包含摆起控制。改变质量、杆长、采样周期或增大初始偏差后，需要重新验证。基于传递函数的系统性整定分析仍可在此基础上继续开展。比较不同控制方法时，应统一模型、初态、时长、Ts 和控制力限制。
+下列初态测试统一使用同一组目标极点及限幅，不为不同案例单独调参。后续重点是大角度及较大速度、角速度偏差，5° 仅作基准检查。当前公式仍基于直立附近的模型且不包含摆起算法，必须记录大扰动下的成功范围、失败表现和饱和情况。改变极点、模型或采样周期后应重新验证；PID 与 LQR 比较还需统一模型、初态、时长、Ts 和力限制。
+
+在 `feedback.py` 的 `create_pid_controller` 开头选择参数来源：
+
+```python
+# 基准增益：需要对照时启用这两行，并注释下面的整定调用。
+# position_pid = settings['position_pid']
+# angle_pid = settings['angle_pid']
+
+# 默认按目标极点配套整定两环。
+angle_pid = tune_angle_pid(parameters, settings)
+position_pid = tune_position_pid(parameters, settings, angle_pid, sample_period)
+```
+
+**默认启用公式整定，调参入口是 JSON 的 `tuning_poles`。** 要比较手填基准，同时启用前两行赋值、注释后两行整定调用；两环必须配套切换。整定只在创建控制器时计算一次，读取 JSON 的物理参数与目标极点来计算 `kp/ki/kd`，保留目标、倾角上限、力上限和积分贡献上限，不回写 JSON。公式模式下修改基准 `kp/ki/kd` 不影响实际输出。
+
+以测试组 M=1、m=1、L=0.5、g=9.81 和上述目标极点为例，公式得到：
+
+| 环路 | kp | ki | kd |
+| --- | ---: | ---: | ---: |
+| 位置环 | 0.105665 | 0.035819 | 0.117540 |
+| 倾角环 | 51.226422 | 0 | 9.360572 |
+
+这一组目标极点给出一套起始设计，不是自动搜索得到的最优解。`configs/template.json` 使用不同质量，会依据其自身模型重新计算增益。归档中的 `feedback_source.py` 会保留本次是否启用了上述两行，因此相同 JSON 也应结合控制器快照理解。
+
+### PID 初始状态测试
+
+以下 8 份配置**只有 `initial_state` 不同**。统一使用 M=1、m=1、L=0.5、g=9.81，相同目标极点与限幅、Ts=0.02 s、记录间隔 0.01 s、最大积分步长 0.01 s；仿真均为 **20 s**，生成曲线和 **20 fps、正常速度的 MP4**。目标位置和目标直立角均为零。
+
+| 配置文件（位于 configs/） | p / m | v / (m/s) | θ / ° | ω / (°/s) | 用途 |
+| --- | ---: | ---: | ---: | ---: | --- |
+| [pid_01_angle_5deg.json](configs/pid_01_angle_5deg.json) | 0 | 0 | 5 | 0 | 唯一的小角度基准 |
+| [pid_02_angle_30deg.json](configs/pid_02_angle_30deg.json) | 0 | 0 | 30 | 0 | 较大倾角恢复，默认入口 |
+| [pid_03_angle_60deg.json](configs/pid_03_angle_60deg.json) | 0 | 0 | 60 | 0 | 大倾角恢复能力 |
+| [pid_04_horizontal_90deg.json](configs/pid_04_horizontal_90deg.json) | 0 | 0 | 90 | 0 | 摆杆水平 |
+| [pid_05_downward_180deg.json](configs/pid_05_downward_180deg.json) | 0 | 0 | 180 | 0 | 摆杆竖直向下 |
+| [pid_06_position_0p3m.json](configs/pid_06_position_0p3m.json) | 0.3 | 0 | 0 | 0 | 单独改变小车位置 |
+| [pid_07_velocity_2mps.json](configs/pid_07_velocity_2mps.json) | 0 | 2 | 0 | 0 | 较大初速度 |
+| [pid_08_angular_velocity_180degps.json](configs/pid_08_angular_velocity_180degps.json) | 0 | 0 | 0 | 180 | 较大初角速度 |
+
+每个案例仅一个初态分量非零；小角度配置只有一份，实验重点放在大扰动上。角度组比较偏角大小，另外三组分别观察位置、速度和角速度的影响。模型没有轨道边界，失败时小车可能移动很远；真实摆角不会被 `angle_limit_deg` 直接限住。θ 连续累计，不在 ±180° 处折返。
+
+例如运行竖直向下案例：
+
+```bash
+python run_simulation.py --config configs/pid_05_downward_180deg.json
+```
+
+依次运行整组（Bash/Zsh）：
+
+```bash
+for config in configs/pid_[0-9][0-9]_*.json; do
+    python run_simulation.py --config "$config"
+done
+```
+
+每个案例分别归档到新的时间目录；检查曲线、视频和最终状态，区分“仿真正常完成”和“控制成功”。
 
 ### LQR 参数
 
@@ -243,7 +384,9 @@ python -m unittest discover -s tests -v
 
 `unittest` 是 **Python 标准库中的测试模块**，无需在项目中创建同名文件。`python -m unittest` 启动该模块，`discover` 自动查找测试，`-s tests` 指定从 `tests/` 目录查找 `test*.py` 文件，`-v` 逐项显示结果。
 
-本项目的测试位于 `tests/test_model.py`、`test_simulation.py`、`test_feedback.py`、`test_archive.py`、`test_pid.py` 和 `test_lqr.py`，检查动力学、能量与动量、反馈时序、配置、归档重跑，以及 PID 的方向、记忆、限幅和指定工况下的非线性响应。LQR 测试检查反馈增益、离散闭环极点、参数变化及非线性对象上的平衡效果。PID 收敛测试读取 `configs/pid.json` 的模型参数、控制参数和采样周期，但初态、目标位置与 10 s 时长由测试用例指定，不直接使用 JSON 的 `initial_state` 和 `duration_s`。运行结束显示 `OK` 表示这些测试通过，不等于当前 JSON 初态已经通过仿真验收，也不能由此推断任意配置都能稳定倒立摆。
+本项目的测试位于 `tests/test_model.py`、`test_simulation.py`、`test_feedback.py`、`test_archive.py`、`test_pid.py` 和 `test_lqr.py`，检查动力学、能量与动量、反馈时序、配置、归档重跑，以及 PID 的方向、两环速度反馈、输出后积分更新和限幅，并核对 8 份 PID 配置除初态外完全一致、仅保留一个小角度案例且覆盖大扰动。整定测试检查默认工厂实际使用极点而非基准增益、完整五阶极点、模型变化、过大采样周期报错、离散矩阵与真实采样仿真的对应关系，以及代表初态下的非线性恢复。LQR 测试检查反馈增益、离散闭环极点、参数变化及非线性对象上的平衡效果。
+
+PID 测试读取默认配置的参数，并在内存副本中分别选择手填或公式模式，不改工作区的注释选择。手填增益用例检查 10 s 末的响应，公式整定用例检查 20 s 仿真的最后 5 s。初态和目标由测试用例指定，不直接使用 JSON 的 `initial_state` 和 `duration_s`。运行结束显示 `OK` 表示这些测试通过，不等于当前 JSON 初态已经通过仿真验收，也不能由此推断任意配置都能稳定倒立摆。
 
 ## 7. 文件导航
 
