@@ -7,8 +7,8 @@
   },
   "initial_state": {
     "position_m": 0.0,
-    "velocity_m_s": 2.0,
-    "angle_deg": 0.0,
+    "velocity_m_s": 0.0,
+    "angle_deg": 35.0,
     "angular_velocity_deg_s": 0.0
   },
   "simulation": {
@@ -39,11 +39,11 @@
         "integral_limit": 5.0
       },
       "tuning_poles": [
-        -1.0,
+        -1,
         -1.2,
         -1.5,
-        -4.0,
-        -5.0
+        -2,
+        -2.5
       ]
     }
   },

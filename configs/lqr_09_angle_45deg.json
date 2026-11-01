@@ -8,7 +8,7 @@
   "initial_state": {
     "position_m": 0.0,
     "velocity_m_s": 0.0,
-    "angle_deg": 180.0,
+    "angle_deg": 45.0,
     "angular_velocity_deg_s": 0.0
   },
   "simulation": {
@@ -21,30 +21,16 @@
   "control": {
     "sample_period_s": 0.02,
     "file": "../feedback.py",
-    "factory": "create_pid_controller",
+    "factory": "create_lqr_controller",
     "settings": {
-      "position_target_m": 0.0,
-      "angle_limit_deg": 10.0,
-      "force_limit_N": 20.0,
-      "position_pid": {
-        "kp": 0.16,
-        "ki": 0.06,
-        "kd": 0.2,
-        "integral_limit": 0.05
-      },
-      "angle_pid": {
-        "kp": 100.0,
-        "ki": 0.0,
-        "kd": 20.0,
-        "integral_limit": 5.0
-      },
-      "tuning_poles": [
-        -1.0,
-        -1.2,
-        -1.5,
-        -4.0,
-        -5.0
-      ]
+      "Q_diag": [
+        10,
+        1,
+        100,
+        1
+      ],
+      "R": 1.0,
+      "force_limit_N": 20.0
     }
   },
   "output": {

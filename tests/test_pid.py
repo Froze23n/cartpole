@@ -33,7 +33,7 @@ def pid_factory_for_test(use_tuning):
 
 class PIDTests(unittest.TestCase):
     def setUp(self):
-        config = json.loads((Path(__file__).resolve().parents[1] / 'configs' / 'pid_02_angle_30deg.json').read_text())
+        config = json.loads((Path(__file__).resolve().parents[1] / 'configs' / 'pid_06_angle_30deg.json').read_text())
         self.settings = config['control']['settings']
         p = config['parameters']
         self.params = Parameters(p['M'], p['m'], p['L'], p['g'])
@@ -145,12 +145,18 @@ class PIDTests(unittest.TestCase):
 
         folder = Path(__file__).resolve().parents[1] / 'configs'
         paths = sorted(folder.glob('pid_[0-9][0-9]_*.json'))
-        self.assertEqual(len(paths), 8)
+        self.assertEqual(len(paths), 17)
         common = None
         initial_states = []
         for path in paths:
             with self.subTest(config=path.name):
                 config, kwargs = read_config(path)
+                paired = json.loads(path.with_name(path.name.replace('pid_', 'lqr_', 1)).read_text())
+                for key in ['parameters', 'initial_state', 'simulation', 'output']:
+                    self.assertEqual(config[key], paired[key])
+                self.assertEqual(config['control']['sample_period_s'], paired['control']['sample_period_s'])
+                self.assertEqual(config['control']['settings']['force_limit_N'],
+                                 paired['control']['settings']['force_limit_N'])
                 initial_states.append(tuple(kwargs['initial_state']))
                 config.pop('initial_state')
                 if common is None:
@@ -161,6 +167,8 @@ class PIDTests(unittest.TestCase):
                 self.assertEqual(config['output']['animation']['format'], 'mp4')
                 self.assertEqual(config['control']['factory'], 'create_pid_controller')
         self.assertEqual(len(set(initial_states)), len(paths))
+        np.testing.assert_allclose([state[2] for state in initial_states[:12]],
+                                   np.deg2rad(np.arange(5, 61, 5)))
         self.assertNotIn((0, 0, 0, 0), initial_states)
         self.assertEqual(sum(0 < abs(state[2]) < np.deg2rad(10) for state in initial_states), 1)
         self.assertIn((0, 0, np.deg2rad(60), 0), initial_states)
@@ -253,7 +261,7 @@ class PIDTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, '5 个有限负实数'):
                     tune_angle_pid(self.params, settings)
         with self.assertRaisesRegex(ValueError, '离散闭环不稳定'):
-            self.tuned_settings(period=0.2)
+            self.tuned_settings(period=0.5)
         angle_pid = tune_angle_pid(self.params, self.settings)
         angle_pid['ki'] = 1
         with self.assertRaisesRegex(ValueError, 'ki=0'):
