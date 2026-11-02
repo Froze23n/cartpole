@@ -1,0 +1,611 @@
+{
+  "base_commit": "ae4bd98d568786a303b7da33c373f8c5e4a83461",
+  "total_runs": 1452,
+  "counts": {
+    "baseline": {
+      "pid": {
+        "runs": 6,
+        "completed": 6,
+        "upright_region_held": 6,
+        "strict_nominal_tolerance_pass": 6,
+        "max_abs_position_m": 1.4511294862936595,
+        "max_abs_angle_deg": 29.999999999999996,
+        "max_peak_actuator_force_N": 17.52737293998322
+      },
+      "lqr": {
+        "runs": 6,
+        "completed": 6,
+        "upright_region_held": 6,
+        "strict_nominal_tolerance_pass": 6,
+        "max_abs_position_m": 1.1270441460034106,
+        "max_abs_angle_deg": 29.999999999999996,
+        "max_peak_actuator_force_N": 20.0
+      }
+    },
+    "input": {
+      "pid": {
+        "runs": 360,
+        "completed": 360,
+        "upright_region_held": 360,
+        "strict_nominal_tolerance_pass": 0,
+        "max_abs_position_m": 1.5010535199099841,
+        "max_abs_angle_deg": 29.999999999999996,
+        "max_peak_actuator_force_N": 17.52737293998322
+      },
+      "lqr": {
+        "runs": 360,
+        "completed": 360,
+        "upright_region_held": 360,
+        "strict_nominal_tolerance_pass": 0,
+        "max_abs_position_m": 1.147973166284575,
+        "max_abs_angle_deg": 29.999999999999996,
+        "max_peak_actuator_force_N": 20.0
+      }
+    },
+    "sensor": {
+      "pid": {
+        "runs": 360,
+        "completed": 360,
+        "upright_region_held": 360,
+        "strict_nominal_tolerance_pass": 0,
+        "max_abs_position_m": 1.4593401980967953,
+        "max_abs_angle_deg": 29.999999999999996,
+        "max_peak_actuator_force_N": 18.022022151024597
+      },
+      "lqr": {
+        "runs": 360,
+        "completed": 360,
+        "upright_region_held": 360,
+        "strict_nominal_tolerance_pass": 0,
+        "max_abs_position_m": 1.135464972199948,
+        "max_abs_angle_deg": 29.999999999999996,
+        "max_peak_actuator_force_N": 20.0
+      }
+    }
+  },
+  "condition_comparisons": {
+    "input": {
+      "tail_angle_rms_deg": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.5666919225996653,
+        "relative_reduction_max": 0.566810135436327,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "tail_position_rms_m": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.5968053916236679,
+        "relative_reduction_max": 0.5968511435369402,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "tail_actuator_rms_N": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.12689602313469267,
+        "relative_reduction_max": 0.12707411499971755,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "tail_angle_abs_p95_deg": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.5804324040417641,
+        "relative_reduction_max": 0.5805826649086017,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "IAE_angle_rad_s": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.42433450462110156,
+        "relative_reduction_max": 0.532478212667102,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "IAE_position_m_s": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.3904977143883929,
+        "relative_reduction_max": 0.508223880275856,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "integral_u2_N2_s": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.1857629130541224,
+        "relative_reduction_max": 0.24159013973329607,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "actuator_tv_rate_N_s": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 0,
+        "conditions_pid_mean_lower": 18,
+        "relative_reduction_min": -0.6970180515721662,
+        "relative_reduction_max": -0.25046593324186767,
+        "pointwise_ci_entirely_above_zero": 0,
+        "pointwise_ci_entirely_below_zero": 18
+      },
+      "max_abs_position_m": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.2236651527794302,
+        "relative_reduction_max": 0.2654902607679676,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "max_abs_angle_deg": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 0,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.0,
+        "relative_reduction_max": 0.0,
+        "pointwise_ci_entirely_above_zero": 0,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "saturation_fraction": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 0,
+        "conditions_pid_mean_lower": 6,
+        "relative_reduction_min": null,
+        "relative_reduction_max": null,
+        "pointwise_ci_entirely_above_zero": 0,
+        "pointwise_ci_entirely_below_zero": 6
+      }
+    },
+    "sensor": {
+      "tail_angle_rms_deg": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.26524049550698425,
+        "relative_reduction_max": 0.26526230225984365,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "tail_position_rms_m": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.22008271475092367,
+        "relative_reduction_max": 0.22008944108999082,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "tail_actuator_rms_N": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 0,
+        "conditions_pid_mean_lower": 18,
+        "relative_reduction_min": -0.6401299398448504,
+        "relative_reduction_max": -0.6401118341630845,
+        "pointwise_ci_entirely_above_zero": 0,
+        "pointwise_ci_entirely_below_zero": 18
+      },
+      "tail_angle_abs_p95_deg": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.27008360365069417,
+        "relative_reduction_max": 0.2701072253994289,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "IAE_angle_rad_s": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.33564975803760694,
+        "relative_reduction_max": 0.4334183440994634,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "IAE_position_m_s": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.34033387011938987,
+        "relative_reduction_max": 0.42791481925108,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "integral_u2_N2_s": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 14,
+        "conditions_pid_mean_lower": 4,
+        "relative_reduction_min": -0.8293712199120103,
+        "relative_reduction_max": 0.23209485855560125,
+        "pointwise_ci_entirely_above_zero": 14,
+        "pointwise_ci_entirely_below_zero": 4
+      },
+      "actuator_tv_rate_N_s": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 0,
+        "conditions_pid_mean_lower": 18,
+        "relative_reduction_min": -0.8136460761728189,
+        "relative_reduction_max": -0.5812031635043093,
+        "pointwise_ci_entirely_above_zero": 0,
+        "pointwise_ci_entirely_below_zero": 18
+      },
+      "max_abs_position_m": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 18,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.22343621350463447,
+        "relative_reduction_max": 0.26445702225322903,
+        "pointwise_ci_entirely_above_zero": 18,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "max_abs_angle_deg": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 0,
+        "conditions_pid_mean_lower": 0,
+        "relative_reduction_min": 0.0,
+        "relative_reduction_max": 0.0,
+        "pointwise_ci_entirely_above_zero": 0,
+        "pointwise_ci_entirely_below_zero": 0
+      },
+      "saturation_fraction": {
+        "conditions": 18,
+        "conditions_lqr_mean_lower": 0,
+        "conditions_pid_mean_lower": 6,
+        "relative_reduction_min": null,
+        "relative_reduction_max": null,
+        "pointwise_ci_entirely_above_zero": 0,
+        "pointwise_ci_entirely_below_zero": 6
+      }
+    }
+  },
+  "C_selection": {
+    "selected_angle_deg": 30.0,
+    "mean_relative_reduction": 0.41599421409542775,
+    "rule": "Maximize the unweighted mean of (mean_PID-mean_LQR)/mean_PID for true tail angle RMS over every noise type and level; all seed pairs required; smallest angle breaks exact ties.",
+    "posthoc_best_case_not_representative": true,
+    "positive_average_advantage_observed": true,
+    "ranking": [
+      {
+        "angle_deg": 5.0,
+        "eligible": true,
+        "mean_relative_reduction": 0.4159942092521805,
+        "conditions": [
+          {
+            "kind": "input",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.15631424875316735,
+            "lqr_mean_deg": 0.06773222648373937,
+            "relative_reduction": 0.5666919233275147
+          },
+          {
+            "kind": "input",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.31264820562706225,
+            "lqr_mean_deg": 0.13546560601763796,
+            "relative_reduction": 0.5667155493634078
+          },
+          {
+            "kind": "input",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.6254542396950812,
+            "lqr_mean_deg": 0.2709404373842873,
+            "relative_reduction": 0.566810135436327
+          },
+          {
+            "kind": "sensor",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.06027744362809523,
+            "lqr_mean_deg": 0.04428942461228494,
+            "relative_reduction": 0.26524049550698425
+          },
+          {
+            "kind": "sensor",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.1205560502296954,
+            "lqr_mean_deg": 0.0885791782909476,
+            "relative_reduction": 0.2652448539730879
+          },
+          {
+            "kind": "sensor",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.2411214080103623,
+            "lqr_mean_deg": 0.17716098924726084,
+            "relative_reduction": 0.2652622979057618
+          }
+        ]
+      },
+      {
+        "angle_deg": 10.0,
+        "eligible": true,
+        "mean_relative_reduction": 0.4159942102768319,
+        "conditions": [
+          {
+            "kind": "input",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.15631424872965644,
+            "lqr_mean_deg": 0.06773222649360142,
+            "relative_reduction": 0.5666919231992505
+          },
+          {
+            "kind": "input",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.31264820560364226,
+            "lqr_mean_deg": 0.13546560602748445,
+            "relative_reduction": 0.5667155492994573
+          },
+          {
+            "kind": "input",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.6254542396726572,
+            "lqr_mean_deg": 0.2709404373940853,
+            "relative_reduction": 0.5668101354051307
+          },
+          {
+            "kind": "sensor",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.06027744392511575,
+            "lqr_mean_deg": 0.044289424610890936,
+            "relative_reduction": 0.26524049915067976
+          },
+          {
+            "kind": "sensor",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.12055605052656045,
+            "lqr_mean_deg": 0.08857917828955508,
+            "relative_reduction": 0.2652448557939474
+          },
+          {
+            "kind": "sensor",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.24112140830604828,
+            "lqr_mean_deg": 0.1771609892458723,
+            "relative_reduction": 0.26526229881252555
+          }
+        ]
+      },
+      {
+        "angle_deg": 15.0,
+        "eligible": true,
+        "mean_relative_reduction": 0.4159942113223017,
+        "conditions": [
+          {
+            "kind": "input",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.15631424870538077,
+            "lqr_mean_deg": 0.06773222650406924,
+            "relative_reduction": 0.5666919230649912
+          },
+          {
+            "kind": "input",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.31264820557914497,
+            "lqr_mean_deg": 0.1354656060379312,
+            "relative_reduction": 0.566715549232094
+          },
+          {
+            "kind": "input",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.6254542396485991,
+            "lqr_mean_deg": 0.27094043740447116,
+            "relative_reduction": 0.5668101353718628
+          },
+          {
+            "kind": "sensor",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.06027744422823265,
+            "lqr_mean_deg": 0.044289424609407664,
+            "relative_reduction": 0.2652405028701688
+          },
+          {
+            "kind": "sensor",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.12055605082977547,
+            "lqr_mean_deg": 0.088579178288074,
+            "relative_reduction": 0.2652448576542429
+          },
+          {
+            "kind": "sensor",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.2411214086085604,
+            "lqr_mean_deg": 0.1771609892443968,
+            "relative_reduction": 0.26526229974045057
+          }
+        ]
+      },
+      {
+        "angle_deg": 20.0,
+        "eligible": true,
+        "mean_relative_reduction": 0.41599421237066353,
+        "conditions": [
+          {
+            "kind": "input",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.156314248680603,
+            "lqr_mean_deg": 0.06773222651546854,
+            "relative_reduction": 0.5666919229233809
+          },
+          {
+            "kind": "input",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.3126482055536555,
+            "lqr_mean_deg": 0.13546560604930236,
+            "relative_reduction": 0.5667155491603989
+          },
+          {
+            "kind": "input",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.6254542396226703,
+            "lqr_mean_deg": 0.270940437415766,
+            "relative_reduction": 0.5668101353358458
+          },
+          {
+            "kind": "sensor",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.06027744453232638,
+            "lqr_mean_deg": 0.04428942460776801,
+            "relative_reduction": 0.2652405066041594
+          },
+          {
+            "kind": "sensor",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.12055605113439505,
+            "lqr_mean_deg": 0.08857917828643748,
+            "relative_reduction": 0.26524485952438814
+          },
+          {
+            "kind": "sensor",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.24112140891330255,
+            "lqr_mean_deg": 0.17716098924276763,
+            "relative_reduction": 0.265262300675808
+          }
+        ]
+      },
+      {
+        "angle_deg": 25.0,
+        "eligible": true,
+        "mean_relative_reduction": 0.4159942133421802,
+        "conditions": [
+          {
+            "kind": "input",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.1563142486568319,
+            "lqr_mean_deg": 0.06773222652899677,
+            "relative_reduction": 0.5666919227709415
+          },
+          {
+            "kind": "input",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.31264820552833034,
+            "lqr_mean_deg": 0.13546560606278224,
+            "relative_reduction": 0.5667155490821867
+          },
+          {
+            "kind": "input",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.6254542395953715,
+            "lqr_mean_deg": 0.2709404374291253,
+            "relative_reduction": 0.5668101352955792
+          },
+          {
+            "kind": "sensor",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.06027744481489883,
+            "lqr_mean_deg": 0.04428942460589565,
+            "relative_reduction": 0.26524051007967425
+          },
+          {
+            "kind": "sensor",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.1205560514183263,
+            "lqr_mean_deg": 0.08857917828456216,
+            "relative_reduction": 0.2652448612704247
+          },
+          {
+            "kind": "sensor",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.24112140919902886,
+            "lqr_mean_deg": 0.17716098924088436,
+            "relative_reduction": 0.2652623015542749
+          }
+        ]
+      },
+      {
+        "angle_deg": 30.0,
+        "eligible": true,
+        "mean_relative_reduction": 0.41599421409542775,
+        "conditions": [
+          {
+            "kind": "input",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.15631424864015925,
+            "lqr_mean_deg": 0.06773222654854529,
+            "relative_reduction": 0.5666919225996653
+          },
+          {
+            "kind": "input",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.31264820551110417,
+            "lqr_mean_deg": 0.13546560608227015,
+            "relative_reduction": 0.5667155489959821
+          },
+          {
+            "kind": "input",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.6254542395762214,
+            "lqr_mean_deg": 0.27094043744845864,
+            "relative_reduction": 0.566810135251405
+          },
+          {
+            "kind": "sensor",
+            "level": 0.5,
+            "pairs": 20,
+            "pid_mean_deg": 0.06027744503603153,
+            "lqr_mean_deg": 0.04428942460366704,
+            "relative_reduction": 0.2652405128121716
+          },
+          {
+            "kind": "sensor",
+            "level": 1.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.12055605164228471,
+            "lqr_mean_deg": 0.08857917828237884,
+            "relative_reduction": 0.26524486265349845
+          },
+          {
+            "kind": "sensor",
+            "level": 2.0,
+            "pairs": 20,
+            "pid_mean_deg": 0.2411214094277418,
+            "lqr_mean_deg": 0.17716098923880064,
+            "relative_reduction": 0.26526230225984365
+          }
+        ]
+      }
+    ]
+  },
+  "uncertainty_note": "95% intervals are pointwise paired t intervals over 20 seeds within a fixed initial-angle/noise/level condition. They are not simultaneous intervals, do not adjust for post-hoc C selection, and do not pool correlated initial angles or noise levels.",
+  "generalization_note": "Only these fixed controller settings, sampled states, noise distributions, intensities and 30 s horizon were tested. Upright retention is not a proof of global stability or sensor-estimator performance."
+}

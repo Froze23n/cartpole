@@ -435,3 +435,81 @@ PID 测试读取默认配置的参数，并在内存副本中分别选择手填�
 | `presentation.pptx`、`assets/` | 课堂展示草稿及插图；不是已完成的实验报告 |
 | [作业要求.pdf](作业要求.pdf) | 课程要求原件 |
 | [AGENTS.md](AGENTS.md) | AI 协作约定与工作交接 |
+
+
+## 噪声鲁棒性实验（A＋C、启动即注噪）
+
+本增量基于 main `ae4bd98d568786a303b7da33c373f8c5e4a83461`，复用当前原始非线性模型和固定 PID/LQR 控制器。PID 为当前固定极点 `[-1,-1.2,-1.5,-2,-2.5]`，LQR 为 Q_diag=[10,1,100,1]、R=1；不逐工况整定。已确认 A＋C 方案，噪声从启动开始注入；C 仅展示按下述规则选出的一个初态，所有工况仍完整归档。
+
+### 实验定义
+
+- 初态为5、10、15、20、25、30度，其他三个状态为零；按实际初态读取最新命名的六对JSON，不沿用旧八组编号。
+- 两控制器共用模型M=m=1、L=0.5、g=9.81、Ts=0.02 s、执行器±20 N；实验30 s、末5 s统计，求解器及记录间隔沿用正式配置。
+- 默认 `configs/noise_experiments.json` 从t=0开始注噪，检验带噪初始恢复；另有 `noise_experiments_steady.json` 从t=10 s注噪，侧重恢复后的抗扰。两套协议分别运行，不能混合统计。
+- 输入噪声为采样时刻更新、区间保持的独立零均值随机水平外力；默认均匀分布，强度alpha=0.5/1/2对应范围±0.25/0.5/1 N。配置存的是标准差（基础0.5/sqrt(3) N），不是均匀分布半宽；可明确切换gaussian，不能在图注继续写均匀分布。
+- 传感器噪声为四状态独立高斯测量误差，基础标准差[p,v,theta,omega]=[0.001 m,0.01 m/s,0.1 deg,1 deg/s]，同样乘alpha；程序内部角度转弧度。真实状态不直接加测量误差。
+- 主实验分别注入输入噪声或传感器噪声，不同时叠加。输入/传感器使用独立随机流；同一条件、同一种子下两控制器使用完全相同的预生成噪声，并保存SHA-256。不同初态也复用同一组序列作受控比较，不能把六初态池化成更多独立种子。
+- 外力施加在执行器限幅之后，实际总力=执行器力+外力。原仿真器积分总力做功。`trajectory.csv`和`control.csv`的force_N为总力；新增`noise_control.csv`分别记录真实/测量/误差状态、执行器力、外力、总力。执行器RMS、平方积分和饱和占比仅统计执行器力。
+- 每个初态/控制器仅运行一次无噪声基准，不重复复制成随机样本。正式定义每个噪声类型、强度、初态有20种子，共1452次（1440次带噪＋12次无噪）；可选小试跑仅5/30度、两档强度、三个种子，共52次，不能代替正式结果。
+
+### 评价与图形
+
+主要指标为真实状态的末段摆角/位置RMS、95分位绝对摆角、执行器RMS/变化率/平方积分、饱和占比、全程及噪声开始后的IAE；另存相对同初态同控制器无噪基准的差值delta，不用接近零的基准误差作分母。原严格四状态末段容差保留，但不把容差未通过直接解释成发散。另记录实际轨迹在记录点下是否始终保持|theta|<90度及首次越界时刻，这是预先声明的有限时域直立区域指标，不是全局稳定性证明；模型没有另加轨道边界。
+
+- A时序图：输入/传感器分别展示5度和30度端点，真摆角、真位置、执行器力按行；跨种子均值±1样本标准差，附末段放大。标准差带不是均值95%置信区间。
+- C配对差：仅一张，包含所选初态下的两类噪声、三档强度及摆角/位置/执行器RMS；同种子PID−LQR散点及均值，0为持平，正/蓝表示LQR指标较低，负/橙表示PID较低。全部20个配对保留。
+- C选择规则：每个初态分别计算六个“噪声类型×强度”条件下 `(PID摆角RMS均值−LQR摆角RMS均值)/PID摆角RMS均值`，六条件等权平均，选最大者；必须有全部配对，精确平手取较小初态。输出 `noise_C_selection.json` 保留六初态的完整排名和各条件数据。此为明确披露的试验后最佳案例，不代表全部工况，不能用它作总体显著性结论。
+- B热图代码作为可选功能保留，当前默认不生成。完整汇总表仍覆盖全部六初态，不能通过只展示C而隐藏其他工况。
+
+论文参考只借鉴可解释的图形结构，并不表示论文验证了本项目的LQR优越性：
+
+- Yuan et al., safe-control-gym (2022)，Fig.4状态时序、Fig.8扰动强度扫描：[作者论文](https://adamhall.github.io/files/pdf/research/2022_safe_control_gym.pdf)。
+- Han et al., Actor-Critic Reinforcement Learning for Control With Stability Guarantee (2020)，Fig.3均值与1SD、Fig.4重复试验倒杆概率：[作者论文](https://arxiv.org/pdf/2004.14288)。
+- Glossop et al., Characterising the Robustness of Reinforcement Learning for Continuous Control using Disturbance Injection (2022)，Fig.3分通道噪声扫描、Fig.8/14二维热图：[作者论文](https://arxiv.org/pdf/2210.15199)。本项目改为初态×噪声坐标，是针对本实验的设计。
+
+历史版式样例不属于本次实验数据，不能混入本次结果。
+
+### 运行方式
+
+默认只打印计划并验证固定源文件，不创建实验结果：
+
+```bash
+python run_noise_experiments.py
+python run_noise_experiments.py --preview
+python -m unittest discover -s tests -p 'test_noise_experiments.py' -v
+```
+
+正式运行和可选的小试跑命令如下，`--run`才会启动仿真；每次使用新的输出目录：
+
+```bash
+python run_noise_experiments.py --run --workers 4 --plots AC
+python run_noise_experiments.py --preview --run --workers 4 --plots AC
+```
+
+`--plots AC/all/A/B/C/none`可选择图形；`--plot-only 实际批次目录 --plots AC`仅重画，不重跑。批次默认位于新的`results/noise-experiments-时间/`，保留配置、输入配置、controller_design.json、真实核心源码、逐运行日志、summary.csv和manifest.json；不同协议和新批次不覆盖已有结果。当前没有运行10 s开始注噪的独立稳态协议，也没有同时叠加两类噪声。
+
+完成后可生成逐条件统计和独立数据核验：
+
+```bash
+python summarize_noise_experiments.py results/<批次目录>
+python audit_noise_experiments.py results/<批次目录>
+python replay_noise_run.py results/<批次目录> runs/sensor/angle_5/level_1/seed_0/lqr --output results/<新的复核目录>
+```
+
+将占位路径替换为实际目录。`condition_statistics.csv`包含固定初态/噪声/强度内的PID、LQR均值和样本标准差、配对差均值及点态95%配对t区间；区间未作多重比较或试验后选例校正，六初态不作为独立种子池化。`verification.json`逐运行核验原始CSV、全部噪声重建与配对、力与测量语义、记录数、指标及源文件哈希。`replay_noise_run.py`用归档代码和配置重跑一例，在新目录保存结果并比较三份CSV的SHA-256；跨平台/库版本重跑可能只有数值容差内一致。
+
+源码锁定覆盖控制器、非线性模型、仿真器和六对正式配置；后续若修改这些文件，程序拒绝沿用旧提交标签，应先检查并更新基准，不能直接绕过校验来声称同一版本结果。
+
+### 已完成批次的解读
+
+2026-11-02的1452次正式噪声实验已全部完成并通过原始记录核验。就本次固定参数和噪声范围而言，两类噪声各18个条件的真实摆角和位置末5 s RMS均值都为LQR较低；输入噪声下摆角RMS约低56.7%，传感器噪声下约低26.5%。传感器噪声下LQR的末段执行器力RMS约高64%，两类噪声下的力变化率也更高；不能写成所有指标均优于PID。
+
+C图按声明规则选中30°，但六初态选例得分几乎相同，不能声称30°在末段抗噪方面实质上更有利。全部1440次带噪轨迹均保持预定直立区域，同时均未达到严格无噪四状态末段容差；随机稳态误差与发散应分开评价。完整结果、各自无噪基准增量和全部工况统计随实验数据包提供，不能只凭所选C案例作整体结论。
+
+
+### 已归档的噪声实验结果
+
+本批次的[A＋C图形、全部工况统计与结果说明](experiments/noise_robustness_20261102/README.md)已归档。
+可下载[图表与可运行代码小包ZIP](experiments/noise_robustness_20261102/noise_results_figures_code_20261102.zip)（约4.7 MB）。
+目录内保留配置、控制器增益、逐运行汇总、配对统计和核验记录；833 MB全量原始CSV压缩包未纳入仓库。
+ZIP是原始交付快照，仓库根目录中的脚本可直接运行，不必先解压ZIP。

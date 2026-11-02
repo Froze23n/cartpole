@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "archive": "runs/sensor/angle_5/level_1/seed_0/pid",
+  "comparisons": {
+    "trajectory.csv": {
+      "original_sha256": "0ba5457346682b526ffd82ac0e741318143b9c563c9c859f75e99efa5d1ad1fb",
+      "replay_sha256": "0ba5457346682b526ffd82ac0e741318143b9c563c9c859f75e99efa5d1ad1fb",
+      "byte_identical": true
+    },
+    "control.csv": {
+      "original_sha256": "570d6a5b31934536702b122ffa737048948faa672dbd1a65e7bebb251e023312",
+      "replay_sha256": "570d6a5b31934536702b122ffa737048948faa672dbd1a65e7bebb251e023312",
+      "byte_identical": true
+    },
+    "noise_control.csv": {
+      "original_sha256": "5c614e41ea104e38930c2e7e9adb7466dce30d3b3fab31df634fec9ce9155cbd",
+      "replay_sha256": "5c614e41ea104e38930c2e7e9adb7466dce30d3b3fab31df634fec9ce9155cbd",
+      "byte_identical": true
+    }
+  },
+  "note": "Byte identity was checked in the same software environment. Other library/platform versions may differ within integration tolerance."
+}

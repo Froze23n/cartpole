@@ -1,0 +1,42 @@
+Audited 100 runs; issues=0
+Audited 200 runs; issues=0
+Audited 300 runs; issues=0
+Audited 400 runs; issues=0
+Audited 500 runs; issues=0
+Audited 600 runs; issues=0
+Audited 700 runs; issues=0
+Audited 800 runs; issues=0
+Audited 900 runs; issues=0
+Audited 1000 runs; issues=0
+Audited 1100 runs; issues=0
+Audited 1200 runs; issues=0
+Audited 1300 runs; issues=0
+Audited 1400 runs; issues=0
+{
+  "status": "passed",
+  "expected_runs": 1452,
+  "audited_runs": 1452,
+  "verified_pairs_including_baselines": 726,
+  "source_sha256": {
+    "cartpole_model.py": "5eec9d5348f2f6a501b7ef4d65bf0dcb772d29266121fc58ea6f71930e80648d",
+    "cartpole_simulation.py": "44680df66a2f69a6a13d8d3b6334787b105d920484f708aeeeb31b6891cccc2e",
+    "feedback.py": "a9d424baf1cd9a98c2ff0f668019e0670f6d5cb09e2803af0244ae015378ff74",
+    "run_noise_experiments.py": "a3c21634bd81f4f2a78589ed0376d952e45e88e981d1018c44ddf19bf00e635a",
+    "noise_review_plots.py": "a61417cb3e197edcb73edd778a1cedd041036a9943d75743283279d8f8eb2595",
+    "noise_review_plots_first_pass.py": "51c99898309bbd088c4ab8ccb9ab8119626f1b47e230e1005bde675071f0e0f2"
+  },
+  "errors": [],
+  "max_energy_balance_error_J": 1.4654943925052066e-14,
+  "checks": [
+    "all raw CSV timestamps, finite values and record counts",
+    "initial true states",
+    "true state, observation and total-force identities",
+    "20 N actuator bound",
+    "independent regeneration of every noise sequence, including startup injection",
+    "matching PID/LQR schedule hashes",
+    "per-run protocols and baseline configurations",
+    "recomputed RMS, p95 angle, control effort and energy residual",
+    "upright classification",
+    "archived source SHA-256 and original core Git blob hashes"
+  ]
+}

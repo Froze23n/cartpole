@@ -1,0 +1,24 @@
+test_baseline_discovery_rejects_missing_or_duplicate_angle (test_noise_experiments.NoiseReviewTests) ... ok
+test_baseline_discovery_rejects_unfair_pair_or_per_angle_tuning (test_noise_experiments.NoiseReviewTests) ... ok
+test_baseline_discovery_uses_real_angles_and_updated_pid (test_noise_experiments.NoiseReviewTests) ... ok
+test_best_c_excludes_incomplete_angles_and_breaks_exact_ties_by_angle (test_noise_experiments.NoiseReviewTests) ... ok
+test_best_c_uses_all_conditions_rather_than_a_single_favorable_condition (test_noise_experiments.NoiseReviewTests) ... ok
+test_current_source_pins_match_and_reject_unreviewed_controller_change (test_noise_experiments.NoiseReviewTests) ... ok
+test_declared_upright_region_and_post_onset_integral_use_true_angle (test_noise_experiments.NoiseReviewTests) ... ok
+test_default_design_matches_review_scope_and_current_commit (test_noise_experiments.NoiseReviewTests) ... ok
+test_feedback_rejects_time_mismatch_and_invalid_actuator (test_noise_experiments.NoiseReviewTests) ... ok
+test_invalid_angles_and_preview_subsets_are_rejected (test_noise_experiments.NoiseReviewTests) ... ok
+test_invalid_units_scales_seeds_and_onset_are_rejected (test_noise_experiments.NoiseReviewTests) ... ok
+test_measurement_copy_and_three_force_channels_are_distinct (test_noise_experiments.NoiseReviewTests) ... ok
+test_metrics_use_truth_and_exact_actuator_hold_durations (test_noise_experiments.NoiseReviewTests) ... ok
+test_nominal_baseline_subtraction_keeps_negative_changes_and_missing_values (test_noise_experiments.NoiseReviewTests) ... ok
+test_pairing_reproducibility_and_scaled_noise_do_not_depend_on_call_order (test_noise_experiments.NoiseReviewTests) ... ok
+test_schedule_onset_and_partial_terminal_hold (test_noise_experiments.NoiseReviewTests) ... ok
+test_sensor_noise_units_and_independent_random_stream (test_noise_experiments.NoiseReviewTests) ... ok
+test_uniform_force_is_calibrated_by_standard_deviation_not_half_width (test_noise_experiments.NoiseReviewTests) ... ok
+test_valid_angle_subset_is_preserved_without_mutating_caller (test_noise_experiments.NoiseReviewTests) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.196s
+
+OK

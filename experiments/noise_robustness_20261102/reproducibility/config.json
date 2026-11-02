@@ -1,0 +1,97 @@
+{
+  "draft": false,
+  "base_commit": "ae4bd98d568786a303b7da33c373f8c5e4a83461",
+  "base_source_blobs": {
+    "feedback.py": "1009c006e89a2fe4b16ca0b44da824970624ebfc",
+    "cartpole_model.py": "2ea0584897f4a2a9d3c2ba7c986fcecd07e89653",
+    "cartpole_simulation.py": "c9bca97573aa1ea0edf8ae7c2df597a97ba296a2",
+    "configs/lqr_01_angle_05deg.json": "fc3ebc7ac2dfdea9282b8bdea3264b2d6a6c6c44",
+    "configs/lqr_02_angle_10deg.json": "3eb1e70bdc9f72bbba1fca928ffad662ad6155d4",
+    "configs/lqr_03_angle_15deg.json": "0c33580aa2d427b637b7d78b83239a06e643e0b7",
+    "configs/lqr_04_angle_20deg.json": "f778d0056e217612d47f833c20c05308f5dc8ee1",
+    "configs/lqr_05_angle_25deg.json": "02d40e106cd2191b1b087a20a7a37be8e8a75f8a",
+    "configs/lqr_06_angle_30deg.json": "2441f67e0f42202fe555d5bdc1a2c72a99ec2820",
+    "configs/pid_01_angle_05deg.json": "4022bf25edb7837198ac17e6ff8996b871125680",
+    "configs/pid_02_angle_10deg.json": "8a51b07bb38f62c5873f24865dcb8f5c90c5469c",
+    "configs/pid_03_angle_15deg.json": "27290842f507b97a17df927408b3c15cbaec54c1",
+    "configs/pid_04_angle_20deg.json": "bb60e9f7c41d8f216de3b79f861f1af5c8afc000",
+    "configs/pid_05_angle_25deg.json": "41831db4dce9c45d41c0904fcfa61a91fad4d7c0",
+    "configs/pid_06_angle_30deg.json": "5e50fab22734e26e57d5ccd0d791118db5746762"
+  },
+  "angles_deg": [
+    5,
+    10,
+    15,
+    20,
+    25,
+    30
+  ],
+  "preview_angles_deg": [
+    5,
+    30
+  ],
+  "duration_s": 30,
+  "tail_seconds": 5,
+  "noise_onset_s": 0,
+  "input_distribution": "uniform",
+  "input_std_N": 0.2886751345948129,
+  "sensor_std": [
+    0.001,
+    0.01,
+    0.1,
+    1
+  ],
+  "sensor_std_units": [
+    "m",
+    "m/s",
+    "deg",
+    "deg/s"
+  ],
+  "levels": [
+    0.5,
+    1,
+    2
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "preview_seeds": [
+    0,
+    1,
+    2
+  ],
+  "preview_levels": [
+    1,
+    2
+  ],
+  "plot_level": 1,
+  "upright_region_limit_deg": 90,
+  "sample_period_s": 0.02,
+  "approved_plot_styles": [
+    "A",
+    "C"
+  ],
+  "c_best_only": true,
+  "c_selection_rule": "max_mean_relative_reduction_in_tail_angle_rms_across_all_noise_types_and_levels",
+  "c_selection_is_posthoc_best_case": true,
+  "preview": false
+}
