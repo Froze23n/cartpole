@@ -1,6 +1,6 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
-results/
+results/legacy
 .mpl-cache/
 .DS_Store

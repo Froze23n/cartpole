@@ -1,0 +1,648 @@
+[
+  {
+    "config": "lqr_01_angle_05deg.json",
+    "controller": "LQR",
+    "case": "01_angle_05deg",
+    "directory": "20261101-231736-870573",
+    "status": "recovered",
+    "settling_time_s": 4.32,
+    "max_position_m": 0.14592381939974583,
+    "max_angle_deg": 5.0,
+    "force_rms_N": 0.27242381493611284,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 1.3426759704060487e-15,
+    "final_state": [
+      -3.7412204275610706e-10,
+      -8.468874821446228e-09,
+      9.158636507257099e-08,
+      -8.630141540054377e-08
+    ]
+  },
+  {
+    "config": "pid_01_angle_05deg.json",
+    "controller": "PID",
+    "case": "01_angle_05deg",
+    "directory": "20261101-231736-870748",
+    "status": "recovered",
+    "settling_time_s": 7.58,
+    "max_position_m": 0.19674453312755377,
+    "max_angle_deg": 5.0,
+    "force_rms_N": 0.30010960567983846,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 1.4328815911568427e-15,
+    "final_state": [
+      -2.808216104744004e-07,
+      2.3876258191387745e-07,
+      -1.1616741783027147e-06,
+      8.675571010863564e-07
+    ]
+  },
+  {
+    "config": "lqr_02_angle_10deg.json",
+    "controller": "LQR",
+    "case": "02_angle_10deg",
+    "directory": "20261101-231806-813758",
+    "status": "recovered",
+    "settling_time_s": 5.21,
+    "max_position_m": 0.296418357060211,
+    "max_angle_deg": 10.0,
+    "force_rms_N": 0.5525993053295315,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 1.4155343563970746e-15,
+    "final_state": [
+      -7.588208866612091e-10,
+      -1.7204234941658543e-08,
+      1.8604402827247e-07,
+      -1.753009483781657e-07
+    ]
+  },
+  {
+    "config": "pid_02_angle_10deg.json",
+    "controller": "PID",
+    "case": "02_angle_10deg",
+    "directory": "20261101-231806-537506",
+    "status": "recovered",
+    "settling_time_s": 8.370000000000001,
+    "max_position_m": 0.4002644840130403,
+    "max_angle_deg": 10.0,
+    "force_rms_N": 0.6101218793836524,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 2.3869795029440866e-15,
+    "final_state": [
+      -5.657487771031879e-07,
+      4.811669799831528e-07,
+      -2.3423205630052344e-06,
+      1.7504990722592908e-06
+    ]
+  },
+  {
+    "config": "lqr_03_angle_15deg.json",
+    "controller": "LQR",
+    "case": "03_angle_15deg",
+    "directory": "20261101-231827-656925",
+    "status": "recovered",
+    "settling_time_s": 5.74,
+    "max_position_m": 0.4563261680465405,
+    "max_angle_deg": 14.999999999999998,
+    "force_rms_N": 0.8484941768931769,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 1.6653345369377348e-15,
+    "final_state": [
+      -1.1710442339035798e-09,
+      -2.6477870503770975e-08,
+      2.863560588322021e-07,
+      -2.698405033144354e-07
+    ]
+  },
+  {
+    "config": "pid_03_angle_15deg.json",
+    "controller": "PID",
+    "case": "03_angle_15deg",
+    "directory": "20261101-231827-485670",
+    "status": "recovered",
+    "settling_time_s": 8.8,
+    "max_position_m": 0.6178268298373368,
+    "max_angle_deg": 14.999999999999998,
+    "force_rms_N": 0.9408592795200312,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 1.6375789613221059e-15,
+    "final_state": [
+      -8.566390189408634e-07,
+      7.290419379839061e-07,
+      -3.552857341945336e-06,
+      2.6589081966706842e-06
+    ]
+  },
+  {
+    "config": "lqr_04_angle_20deg.json",
+    "controller": "LQR",
+    "case": "04_angle_20deg",
+    "directory": "20261101-231848-704173",
+    "status": "recovered",
+    "settling_time_s": 6.13,
+    "max_position_m": 0.6310473866207928,
+    "max_angle_deg": 20.0,
+    "force_rms_N": 1.168581246151487,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 2.4980018054066022e-15,
+    "final_state": [
+      -1.6449118370242872e-09,
+      -3.6564934459983124e-08,
+      3.9569281039599356e-07,
+      -3.730451692162802e-07
+    ]
+  },
+  {
+    "config": "pid_04_angle_20deg.json",
+    "controller": "PID",
+    "case": "04_angle_20deg",
+    "directory": "20261101-231848-656370",
+    "status": "recovered",
+    "settling_time_s": 9.1,
+    "max_position_m": 0.8577304875785048,
+    "max_angle_deg": 20.0,
+    "force_rms_N": 1.3054417225647676,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 2.3314683517128287e-15,
+    "final_state": [
+      -1.1489882212544918e-06,
+      9.790770885761442e-07,
+      -4.781284594469114e-06,
+      3.5876726931069382e-06
+    ]
+  },
+  {
+    "config": "lqr_05_angle_25deg.json",
+    "controller": "LQR",
+    "case": "05_angle_25deg",
+    "directory": "20261101-231910-453885",
+    "status": "recovered",
+    "settling_time_s": 6.6000000000000005,
+    "max_position_m": 0.837442490145363,
+    "max_angle_deg": 25.0,
+    "force_rms_N": 1.5223258035582288,
+    "force_saturation_fraction": 0.002,
+    "max_energy_error_J": 2.4424906541753444e-15,
+    "final_state": [
+      -2.1407485644692207e-09,
+      -4.859324066209692e-08,
+      5.2545757056675e-07,
+      -4.950992197372283e-07
+    ]
+  },
+  {
+    "config": "pid_05_angle_25deg.json",
+    "controller": "PID",
+    "case": "05_angle_25deg",
+    "directory": "20261101-231910-444472",
+    "status": "recovered",
+    "settling_time_s": 9.31,
+    "max_position_m": 1.1300833088235607,
+    "max_angle_deg": 25.0,
+    "force_rms_N": 1.722044096359151,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 2.7755575615628914e-15,
+    "final_state": [
+      -1.42223350377875e-06,
+      1.2149603761712451e-06,
+      -5.957354433751285e-06,
+      4.492774022118712e-06
+    ]
+  },
+  {
+    "config": "lqr_06_angle_30deg.json",
+    "controller": "LQR",
+    "case": "06_angle_30deg",
+    "directory": "20261101-231932-098720",
+    "status": "recovered",
+    "settling_time_s": 6.99,
+    "max_position_m": 1.1270441460034686,
+    "max_angle_deg": 29.999999999999996,
+    "force_rms_N": 1.93932312802369,
+    "force_saturation_fraction": 0.004,
+    "max_energy_error_J": 6.217248937900877e-15,
+    "final_state": [
+      -2.392028106925784e-09,
+      -6.627368446881079e-08,
+      7.119655674706066e-07,
+      -6.675241065210027e-07
+    ]
+  },
+  {
+    "config": "pid_06_angle_30deg.json",
+    "controller": "PID",
+    "case": "06_angle_30deg",
+    "directory": "20261101-231932-027158",
+    "status": "recovered",
+    "settling_time_s": 9.450000000000001,
+    "max_position_m": 1.4511294862936606,
+    "max_angle_deg": 29.999999999999996,
+    "force_rms_N": 2.217164379602919,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 5.329070518200751e-15,
+    "final_state": [
+      -1.639846099701077e-06,
+      1.4076712672057313e-06,
+      -6.956031154429329e-06,
+      5.296018387101786e-06
+    ]
+  },
+  {
+    "config": "lqr_07_angle_35deg.json",
+    "controller": "LQR",
+    "case": "07_angle_35deg",
+    "directory": "20261101-231953-812610",
+    "status": "recovered",
+    "settling_time_s": 7.32,
+    "max_position_m": 1.571748181911212,
+    "max_angle_deg": 35.0,
+    "force_rms_N": 2.4891819208172152,
+    "force_saturation_fraction": 0.009,
+    "max_energy_error_J": 6.217248937900877e-15,
+    "final_state": [
+      -2.8128808205738783e-09,
+      -9.339789145745621e-08,
+      9.984076540761625e-07,
+      -9.325643169094101e-07
+    ]
+  },
+  {
+    "config": "pid_07_angle_35deg.json",
+    "controller": "PID",
+    "case": "07_angle_35deg",
+    "directory": "20261101-231953-796662",
+    "status": "recovered",
+    "settling_time_s": 9.91,
+    "max_position_m": 1.9413628494421438,
+    "max_angle_deg": 35.0,
+    "force_rms_N": 2.7441623065922505,
+    "force_saturation_fraction": 0.002,
+    "max_energy_error_J": 6.328271240363392e-15,
+    "final_state": [
+      -2.5599984890592576e-06,
+      2.1801426274104673e-06,
+      -1.0657087754837956e-05,
+      8.021012979187357e-06
+    ]
+  },
+  {
+    "config": "lqr_08_angle_40deg.json",
+    "controller": "LQR",
+    "case": "08_angle_40deg",
+    "directory": "20261101-232015-624073",
+    "status": "recovered",
+    "settling_time_s": 7.61,
+    "max_position_m": 2.3830695385539564,
+    "max_angle_deg": 40.0,
+    "force_rms_N": 3.412431105757651,
+    "force_saturation_fraction": 0.015000000000000003,
+    "max_energy_error_J": 1.2434497875801753e-14,
+    "final_state": [
+      -1.2549163062113021e-08,
+      -1.2814667694298212e-07,
+      1.446903013371511e-06,
+      -1.4065866557842674e-06
+    ]
+  },
+  {
+    "config": "pid_08_angle_40deg.json",
+    "controller": "PID",
+    "case": "08_angle_40deg",
+    "directory": "20261101-232015-616350",
+    "status": "recovered",
+    "settling_time_s": 10.59,
+    "max_position_m": 3.113262073333671,
+    "max_angle_deg": 40.0,
+    "force_rms_N": 3.597917101891627,
+    "force_saturation_fraction": 0.011000000000000001,
+    "max_energy_error_J": 1.2434497875801753e-14,
+    "final_state": [
+      -4.803071493323545e-06,
+      4.0093025479139095e-06,
+      -1.911155990470195e-05,
+      1.4039486269445961e-05
+    ]
+  },
+  {
+    "config": "lqr_09_angle_45deg.json",
+    "controller": "LQR",
+    "case": "09_angle_45deg",
+    "directory": "20261101-232037-614487",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 1675.9427051034886,
+    "max_angle_deg": 8241.08332941663,
+    "force_rms_N": 19.945468000095616,
+    "force_saturation_fraction": 0.991,
+    "max_energy_error_J": 2.4730979930609465e-08,
+    "final_state": [
+      -1675.9427051034886,
+      -181.64547530026388,
+      -8241.08332941663,
+      -532.937816956519
+    ]
+  },
+  {
+    "config": "pid_09_angle_45deg.json",
+    "controller": "PID",
+    "case": "09_angle_45deg",
+    "directory": "20261101-232037-434344",
+    "status": "recovered",
+    "settling_time_s": 11.85,
+    "max_position_m": 10.578758518021987,
+    "max_angle_deg": 45.0,
+    "force_rms_N": 5.853889560498368,
+    "force_saturation_fraction": 0.03,
+    "max_energy_error_J": 4.796163466380676e-14,
+    "final_state": [
+      -1.4693169002036215e-05,
+      1.2563182955449691e-05,
+      -6.635960152964721e-05,
+      5.778790330813531e-05
+    ]
+  },
+  {
+    "config": "lqr_10_angle_50deg.json",
+    "controller": "LQR",
+    "case": "10_angle_50deg",
+    "directory": "20261101-232101-657406",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 2000.0913600303138,
+    "max_angle_deg": 401.0989236864529,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 6.1918399296700954e-09,
+    "final_state": [
+      2000.0913600303138,
+      200.59285900467003,
+      383.6159629932714,
+      -148.29261022641126
+    ]
+  },
+  {
+    "config": "pid_10_angle_50deg.json",
+    "controller": "PID",
+    "case": "10_angle_50deg",
+    "directory": "20261101-232100-098195",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 2000.0913600303138,
+    "max_angle_deg": 401.0989236864529,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 6.1918399296700954e-09,
+    "final_state": [
+      2000.0913600303138,
+      200.59285900467003,
+      383.6159629932714,
+      -148.29261022641126
+    ]
+  },
+  {
+    "config": "lqr_11_angle_55deg.json",
+    "controller": "LQR",
+    "case": "11_angle_55deg",
+    "directory": "20261101-232125-632968",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 1999.9772547351292,
+    "max_angle_deg": 396.09790013150297,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 6.322807166725397e-09,
+    "final_state": [
+      1999.9772547351292,
+      200.17502079964316,
+      65.52375197078103,
+      -96.81454319756716
+    ]
+  },
+  {
+    "config": "pid_11_angle_55deg.json",
+    "controller": "PID",
+    "case": "11_angle_55deg",
+    "directory": "20261101-232124-020947",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 1999.9772547351292,
+    "max_angle_deg": 396.09790013150297,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 6.322807166725397e-09,
+    "final_state": [
+      1999.9772547351292,
+      200.17502079964316,
+      65.52375197078103,
+      -96.81454319756716
+    ]
+  },
+  {
+    "config": "lqr_12_angle_60deg.json",
+    "controller": "LQR",
+    "case": "12_angle_60deg",
+    "directory": "20261101-232149-714683",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 1999.9681167944932,
+    "max_angle_deg": 391.0984602448531,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 5.657057045027614e-09,
+    "final_state": [
+      1999.9681167944932,
+      200.09020108300246,
+      83.49310517215145,
+      -182.42198107152322
+    ]
+  },
+  {
+    "config": "pid_12_angle_60deg.json",
+    "controller": "PID",
+    "case": "12_angle_60deg",
+    "directory": "20261101-232148-128738",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 1999.9681167944932,
+    "max_angle_deg": 391.0984602448531,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 5.657057045027614e-09,
+    "final_state": [
+      1999.9681167944932,
+      200.09020108300246,
+      83.49310517215145,
+      -182.42198107152322
+    ]
+  },
+  {
+    "config": "lqr_13_horizontal_90deg.json",
+    "controller": "LQR",
+    "case": "13_horizontal_90deg",
+    "directory": "20261101-232213-943862",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 2000.166584246878,
+    "max_angle_deg": 361.09831292448337,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 3.3178366720676422e-09,
+    "final_state": [
+      2000.166584246878,
+      197.47777091861388,
+      160.50874307398914,
+      -613.1929297124472
+    ]
+  },
+  {
+    "config": "pid_13_horizontal_90deg.json",
+    "controller": "PID",
+    "case": "13_horizontal_90deg",
+    "directory": "20261101-232212-459236",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 2000.166584246878,
+    "max_angle_deg": 361.09831292448337,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 3.3178366720676422e-09,
+    "final_state": [
+      2000.166584246878,
+      197.47777091861388,
+      160.50874307398914,
+      -613.1929297124472
+    ]
+  },
+  {
+    "config": "lqr_14_downward_180deg.json",
+    "controller": "LQR",
+    "case": "14_downward_180deg",
+    "directory": "20261101-232238-117185",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 2000.1204342195567,
+    "max_angle_deg": 271.0990257630383,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 1.418811734765768e-10,
+    "final_state": [
+      2000.1204342195567,
+      198.94020465700936,
+      208.7989018374182,
+      -277.16853874126446
+    ]
+  },
+  {
+    "config": "pid_14_downward_180deg.json",
+    "controller": "PID",
+    "case": "14_downward_180deg",
+    "directory": "20261101-232236-618586",
+    "status": "not_recovered",
+    "settling_time_s": null,
+    "max_position_m": 2000.1204342195567,
+    "max_angle_deg": 271.0990257630383,
+    "force_rms_N": 20.0,
+    "force_saturation_fraction": 1.0,
+    "max_energy_error_J": 1.418811734765768e-10,
+    "final_state": [
+      2000.1204342195567,
+      198.94020465700936,
+      208.7989018374182,
+      -277.16853874126446
+    ]
+  },
+  {
+    "config": "lqr_15_position_0p3m.json",
+    "controller": "LQR",
+    "case": "15_position_0p3m",
+    "directory": "20261101-232302-494509",
+    "status": "recovered",
+    "settling_time_s": 4.54,
+    "max_position_m": 0.3074000592073032,
+    "max_angle_deg": 1.2769728388753836,
+    "force_rms_N": 0.10370462171413108,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 1.0845151925185455e-15,
+    "final_state": [
+      -7.140933704167303e-09,
+      -1.8666542474659492e-09,
+      8.276194513776709e-08,
+      -1.2223041317218376e-07
+    ]
+  },
+  {
+    "config": "pid_15_position_0p3m.json",
+    "controller": "PID",
+    "case": "15_position_0p3m",
+    "directory": "20261101-232301-065598",
+    "status": "recovered",
+    "settling_time_s": 7.6000000000000005,
+    "max_position_m": 0.30813171617075985,
+    "max_angle_deg": 1.8003586669985785,
+    "force_rms_N": 0.1532816451577698,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 1.119044667689189e-15,
+    "final_state": [
+      -2.870125617497565e-07,
+      2.4760516761435297e-07,
+      -1.2376626406805597e-06,
+      9.585232739383768e-07
+    ]
+  },
+  {
+    "config": "lqr_16_velocity_2mps.json",
+    "controller": "LQR",
+    "case": "16_velocity_2mps",
+    "directory": "20261101-232325-023851",
+    "status": "recovered",
+    "settling_time_s": 6.95,
+    "max_position_m": 1.1933964792527867,
+    "max_angle_deg": 15.925789134255899,
+    "force_rms_N": 1.2409438682975285,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 1.9984014443252818e-14,
+    "final_state": [
+      -8.588643715628187e-09,
+      -5.860011969423583e-08,
+      6.869197771812251e-07,
+      -6.848903164442283e-07
+    ]
+  },
+  {
+    "config": "pid_16_velocity_2mps.json",
+    "controller": "PID",
+    "case": "16_velocity_2mps",
+    "directory": "20261101-232323-649635",
+    "status": "recovered",
+    "settling_time_s": 9.14,
+    "max_position_m": 1.285108625700632,
+    "max_angle_deg": 19.512207076368146,
+    "force_rms_N": 1.5265918516907133,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 4.884981308350689e-15,
+    "final_state": [
+      -1.237689437496821e-06,
+      1.0686968076929812e-06,
+      -5.33653213596343e-06,
+      4.118989761843991e-06
+    ]
+  },
+  {
+    "config": "lqr_17_angular_velocity_180degps.json",
+    "controller": "LQR",
+    "case": "17_angular_velocity_180degps",
+    "directory": "20261101-232348-154818",
+    "status": "recovered",
+    "settling_time_s": 7.1000000000000005,
+    "max_position_m": 1.277565127392488,
+    "max_angle_deg": 15.534128712061237,
+    "force_rms_N": 1.878253794758775,
+    "force_saturation_fraction": 0.003,
+    "max_energy_error_J": 1.7969306598253354e-13,
+    "final_state": [
+      -4.199396685749899e-09,
+      -7.23166905482334e-08,
+      7.909735833579902e-07,
+      -7.516286752462554e-07
+    ]
+  },
+  {
+    "config": "pid_17_angular_velocity_180degps.json",
+    "controller": "PID",
+    "case": "17_angular_velocity_180degps",
+    "directory": "20261101-232346-835884",
+    "status": "recovered",
+    "settling_time_s": 9.69,
+    "max_position_m": 1.7404339355040601,
+    "max_angle_deg": 22.485749291607977,
+    "force_rms_N": 2.2652974415127964,
+    "force_saturation_fraction": 0.0,
+    "max_energy_error_J": 3.529468384222412e-14,
+    "final_state": [
+      -2.071122688790115e-06,
+      1.7730312537142122e-06,
+      -8.732269994198018e-06,
+      6.627702639836329e-06
+    ]
+  }
+]

@@ -1,0 +1,308 @@
+[
+  {
+    "config": "lqr_01_angle_05deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_01_angle_05deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_02_angle_10deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_02_angle_10deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_03_angle_15deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_03_angle_15deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_04_angle_20deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_04_angle_20deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_05_angle_25deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_05_angle_25deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_06_angle_30deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_06_angle_30deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_07_angle_35deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_07_angle_35deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_08_angle_40deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_08_angle_40deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_09_angle_45deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_09_angle_45deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_10_angle_50deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_10_angle_50deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_11_angle_55deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_11_angle_55deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_12_angle_60deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_12_angle_60deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_13_horizontal_90deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_13_horizontal_90deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_14_downward_180deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_14_downward_180deg.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_15_position_0p3m.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_15_position_0p3m.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_16_velocity_2mps.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_16_velocity_2mps.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "lqr_17_angular_velocity_180degps.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  },
+  {
+    "config": "pid_17_angular_velocity_180degps.json",
+    "codec_name": "h264",
+    "width": 800,
+    "height": 450,
+    "r_frame_rate": "20/1",
+    "nb_frames": "401",
+    "full_decode_passed": true
+  }
+]

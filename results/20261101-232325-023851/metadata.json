@@ -1,0 +1,70 @@
+{
+  "duration_s": 20.0,
+  "output_dt_s": 0.01,
+  "initial_state": [
+    0.0,
+    2.0,
+    0.0,
+    0.0
+  ],
+  "solver": {
+    "method": "DOP853",
+    "max_step": 0.01,
+    "rtol": 1e-09,
+    "atol": 1e-11
+  },
+  "control": {
+    "sample_period_s": 0.02,
+    "updates": 1000,
+    "terminal_policy": "No update at the final time; hold the last command.",
+    "observation": "Exact simulated [p, v, theta, omega]; no sensor noise or delay."
+  },
+  "force_input": {
+    "type": "feedback_zoh",
+    "file": "control.csv"
+  },
+  "rhs_evaluations": 36380,
+  "run": {
+    "started_at": "2026-11-01T23:23:25.023851+08:00",
+    "timezone": "Asia/Shanghai",
+    "status": "completed",
+    "finished_at": "2026-11-01T23:23:47.821756+08:00"
+  },
+  "archive": {
+    "configuration": "config.json",
+    "files": {
+      "control.file": "feedback_source.py"
+    }
+  },
+  "versions": {
+    "python": "3.12.15",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2"
+  },
+  "parameters": {
+    "cart_mass": 1.0,
+    "pole_mass": 1.0,
+    "length": 0.5,
+    "gravity": 9.81
+  },
+  "state_order": [
+    "position_m",
+    "velocity_m_s",
+    "angle_rad",
+    "angular_velocity_rad_s"
+  ],
+  "angle_convention": "Unwrapped; zero upright; positive leans right.",
+  "model": "Frictionless cart, massless rigid rod, point mass at tip; unlimited track; no collisions.",
+  "summary": {
+    "records": 2001,
+    "final_state": [
+      -8.588643715628187e-09,
+      -5.860011969423583e-08,
+      1.1989011808878192e-08,
+      -1.1953591036977645e-08
+    ],
+    "max_abs_energy_balance_error_J": 1.9984014443252818e-14,
+    "max_abs_recorded_force_N": 8.536867060938858
+  }
+}
